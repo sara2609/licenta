@@ -1,0 +1,42 @@
+.add-product-container {
+    padding: 30px;
+    max-width: 500px;
+    margin: auto;
+    background: #f8f8f8;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+}
+
+.add-product-form input,
+.add-product-form textarea,
+.add-product-form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.add-product-form textarea {
+    min-height: 100px; /* textarea mai mare */
+}
+
+.add-product-form button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.add-product-form button:hover {
+    background: #45a049;
+}
+
+.message {
+    margin-top: 15px;
+    font-weight: bold;
+}

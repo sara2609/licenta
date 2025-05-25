@@ -1,0 +1,64 @@
+/* src/components/CheckoutPage.css */
+
+.checkout-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #111;
+    border-radius: 10px;
+    color: #fff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+
+.checkout-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.checkout-form input,
+.checkout-form select {
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+.checkout-form input:focus,
+.checkout-form select:focus {
+    outline: none;
+    border-color: #1e90ff;
+}
+
+.place-order-button {
+    background-color: #1e90ff;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.place-order-button:hover {
+    background-color: #0074cc;
+}
+
+label {
+    margin-top: 10px;
+    font-weight: bold;
+}
+.discount-info {
+    background-color: #e0f7e9;
+    padding: 10px;
+    border: 1px dashed #4caf50;
+    margin: 10px 0;
+    border-radius: 6px;
+    color: #2e7d32;
+}

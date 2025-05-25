@@ -1,0 +1,84 @@
+.product-page-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.product-page-container h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.product-page-container p {
+    font-size: 18px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.review-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    color: #000; /* text negru pentru light mode */
+}
+
+.review-form {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.review-form label {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.review-form select {
+    padding: 8px;
+    margin-bottom: 15px;
+    width: 100px;
+}
+
+.review-form textarea {
+    padding: 10px;
+    resize: vertical;
+    min-height: 100px;
+    margin-bottom: 15px;
+}
+
+.review-form button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.review-form button:hover {
+    background-color: #45a049;
+}
+
+/* ✅ Suprascriem cu gri plăcut ochiului pentru dark mode */
+.dark .review-item {
+    background-color: #dcdcdc;
+    color: #000;
+}
+.out-of-stock {
+    background-color: #e60000; /* roșu deschis */
+    cursor: not-allowed;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.out-of-stock-text {
+    color: #000; /* roșu intens */
+}

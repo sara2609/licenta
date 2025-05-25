@@ -1,0 +1,25 @@
+.fidelity-container {
+    padding: 2rem;
+    text-align: center;
+}
+
+/* Light mode */
+.fidelity-card {
+    max-width: 400px;
+    margin: auto;
+    padding: 1rem;
+    border: 2px dashed #333;
+    border-radius: 16px;
+    background-color: #d8d8d8; /* fundal alb mereu */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #000; /* text negru default */
+}
+
+/* Dark mode - doar textul devine gri deschis */
+.dark .fidelity-card {
+    color: #000;
+}
+
+.qr-section {
+    margin-top: 1rem;
+}

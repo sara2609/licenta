@@ -1,0 +1,63 @@
+.account-container {
+    padding: 30px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.center-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.account-info {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+}
+
+.logout-button,
+.change-password-button,
+.change-password button {
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.change-password {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.change-password input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+.account-info {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    text-align: center;
+    color: #000; /* ✅ text vizibil pe alb */
+}
+
+/* ✅ stil pentru dark mode */
+.dark .account-info {
+    background: #d8d8d8;
+    color: 000;
+}

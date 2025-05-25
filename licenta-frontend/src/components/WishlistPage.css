@@ -1,0 +1,29 @@
+.wishlist-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Titlu în mod dark */
+.wishlist-container.dark h2 {
+    color: white;
+}
+
+/* CARD produs */
+.wishlist-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 20px auto;
+    max-width: 300px;
+    color: #000;
+}
+
+/* Dark mode pt carduri */
+.wishlist-container.dark .wishlist-card {
+    background-color: #2c2c2c;
+    color: white;
+}

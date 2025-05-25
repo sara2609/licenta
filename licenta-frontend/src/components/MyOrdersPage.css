@@ -1,0 +1,59 @@
+.orders-container {
+    padding: 40px;
+    max-width: 700px;
+    margin: auto;
+    color: #222;
+}
+
+.order-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #f9f9f9;
+}
+
+.order-card h4 {
+    margin-bottom: 10px;
+}
+
+.order-card ul {
+    padding-left: 20px;
+}
+
+.order-card li {
+    margin-bottom: 5px;
+}
+.orders-page {
+    padding: 20px;
+}
+
+.orders-page h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #222; /* implicit pe alb */
+}
+
+/* dark mode: titlu alb */
+.dark .orders-page h2 {
+    color: #fff;
+}
+
+/* fiecare card de comandă */
+.order-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: #000000;
+}
+
+/* dark mode: card gri și text alb */
+.dark .order-card {
+    background-color: #d8d8d8;
+    color: #000000;
+}
+.orders-container.dark h2 {
+    color: white;
+}

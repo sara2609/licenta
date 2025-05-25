@@ -1,0 +1,47 @@
+.stripe-checkout-container {
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.stripe-checkout-form-custom {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.row label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
+    display: block;
+}
+
+.stripe-input, input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    width: 100%;
+}
+
+button {
+    background-color: #1a73e8;
+    color: white;
+    font-weight: bold;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+}
+
+.error {
+    color: red;
+}

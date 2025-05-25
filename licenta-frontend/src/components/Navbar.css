@@ -1,0 +1,166 @@
+/* Navbar bar principal */
+.navbar {
+    background-color: #111;
+    padding: 20px 0;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Logo centrat */
+.navbar-center-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-img-big {
+    height: 70px;
+    width: auto;
+}
+
+/* Buton ☰ */
+.menu-toggle {
+    position: absolute;
+    left: 25px;
+    top: 24px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* Iconițele din dreapta sus */
+.navbar-icons {
+    position: absolute;
+    right: 25px;
+    top: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.icon-link {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+}
+
+.icon-link:hover {
+    color: #1e90ff;
+}
+
+/* Fundal gri din spate */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1100; /* mai mare ca orice altceva */
+}
+
+/* Meniu lateral */
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background-color: #111;
+    color: white;
+    padding: 60px 20px 20px;
+    transition: left 0.3s ease-in-out;
+    z-index: 1200; /* foarte mare, peste carusel și orice altceva */
+}
+
+.side-menu.open {
+    left: 0;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.side-menu li {
+    margin: 15px 0;
+}
+
+/* Linkuri din meniu */
+.side-menu a,
+.side-menu button {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    font-family: inherit;
+}
+
+.side-menu a:hover,
+.side-menu button:hover {
+    color: #1e90ff;
+}
+
+/* Titlu pentru categorii */
+.section-label {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+    margin-left: 8px;
+}
+
+/* Subcategorie butoane */
+.category-button {
+    background: none;
+    border: none;
+    color: #ccc;
+    text-align: left;
+    font-size: 14px;
+    margin-left: 22px;
+    padding: 4px 0;
+    cursor: pointer;
+    font-weight: 400;
+    transition: color 0.2s ease;
+}
+
+.category-button:hover {
+    color: #1e90ff;
+}
+
+/* Buton de închidere ❮ */
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+/* Stil activ pe categorie */
+.active-category {
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* 🔧 Z-index redus pentru carusel săgeți (dacă e nevoie global) */
+.carousel-button,
+.product-slider-arrow {
+    z-index: 10 !important;
+    position: relative; /* asigură layering corect */
+}
