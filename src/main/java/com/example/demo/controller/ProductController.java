@@ -140,4 +140,35 @@ public class ProductController {
                 .filter(p -> p.getStock() <= 5)
                 .collect(Collectors.toList());
     }
+
+    @GetMapping("/in-stock")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public List<Product> getProductsInStock() {
+        return productRepository.findAll().stream()
+                .filter(p -> p.getStock() > 0)
+                .collect(Collectors.toList());
+    }
+
+    @PutMapping("/{id}/discount")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> applyDiscount(
+            @PathVariable Long id,
+            @RequestParam(required = false) Double procent,
+            @RequestParam(required = false) Double suma
+    ) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produsul nu există"));
+
+        if (procent != null && procent > 0) {
+            double newPrice = product.getPrice() - (product.getPrice() * (procent / 100.0));
+            product.setPrice(Math.max(newPrice, 0));
+        } else if (suma != null && suma > 0) {
+            product.setPrice(Math.max(product.getPrice() - suma, 0));
+        } else {
+            return ResponseEntity.badRequest().body("Trebuie să specifici procentul sau suma.");
+        }
+
+        productRepository.save(product);
+        return ResponseEntity.ok(product);
+    }
 }

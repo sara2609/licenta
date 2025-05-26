@@ -1,4 +1,3 @@
-// ... (importurile rămân la fel)
 import { useContext, useState, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
@@ -125,6 +124,7 @@ const Navbar = () => {
                                 )}
                             </li>
                             <li><Link to="/add-product" onClick={closeMenu}>➕ Adaugă Produs</Link></li>
+                            <li><Link to="/admin/manage-discounts" onClick={closeMenu}>💸 Admin Reduceri</Link></li>
                             <li><Link to="/admin-users" onClick={closeMenu}>🚫 Admin Ban Users</Link></li>
                             <li><Link to="/admin/reward-history" onClick={closeMenu}>📅 Istoric Puncte</Link></li>
                         </>

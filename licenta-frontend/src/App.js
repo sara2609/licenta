@@ -27,13 +27,12 @@ import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import DailyRewardPage from "./components/DailyRewardPage";
 import RewardHistoryAdminPage from "./components/RewardHistoryAdminPage";
-
+import ManageDiscountsPage from "./components/ManageDiscountsPage";
 
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
-
 
 function App() {
     return (
@@ -67,10 +66,9 @@ function App() {
                                 <Route path="/admin-reply" element={<><Navbar /><AdminReplyPage /></>} />
                                 <Route path="/admin-users" element={<><Navbar /><AdminUsersPage /></>} />
                                 <Route path="/admin/update-stock" element={<><Navbar /><UpdateStockPage /></>} />
-                                <Route path="/daily-reward" element={<><Navbar /><DailyRewardPage /><ChatWidget /></>} />
+                                <Route path="/admin/manage-discounts" element={<><Navbar /><ManageDiscountsPage /></>} />
                                 <Route path="/daily-reward" element={<><Navbar /><DailyRewardPage /><ChatWidget /></>} />
                                 <Route path="/admin/reward-history" element={<><Navbar /><RewardHistoryAdminPage /></>} />
-
                             </Routes>
                         </Router>
                     </AuthProvider>
