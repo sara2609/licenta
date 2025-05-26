@@ -141,7 +141,16 @@ const ShopPage = () => {
                             <img src={getImageUrl(product.imageUrl)} alt={product.name} className="product-image" />
                             <h3 className="product-name">{product.name}</h3>
                             <p className="product-description">{product.description}</p>
-                            <p className="product-price">{product.price.toFixed(2)} RON</p>
+
+                            {product.initialPrice && product.initialPrice > product.price ? (
+                                <div>
+                                    <span className="discount-badge">Reducere</span>
+                                    <p className="old-price">{product.initialPrice.toFixed(2)} RON</p>
+                                    <p className="product-price reduced">{product.price.toFixed(2)} RON</p>
+                                </div>
+                            ) : (
+                                <p className="product-price">{product.price.toFixed(2)} RON</p>
+                            )}
 
                             <div className="product-actions">
                                 {product.stock > 0 ? (
@@ -179,53 +188,6 @@ const ShopPage = () => {
                         </div>
                     ))}
                 </Carousel>
-            )}
-
-            {recommendedProducts.length > 0 && (
-                <>
-                    <h3>🔝 Recomandate</h3>
-                    <div className="recommended-container">
-                        {recommendedProducts.map(prod => (
-                            <div key={prod.id} className="product-card" onClick={() => handleProductClick(prod.id)}>
-                                <img src={getImageUrl(prod.imageUrl)} alt={prod.name} className="product-image" />
-                                <h4>{prod.name}</h4>
-                                <p>{prod.description}</p>
-                                <p style={{ color: "red" }}>{prod.price.toFixed(2)} RON</p>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            )}
-
-            {recentProducts.length > 0 && (
-                <>
-                    <h3>👀 Vizualizate recent</h3>
-                    <div className="recent-container">
-                        {recentProducts.map(prod => (
-                            <div key={prod.id} className="product-card" onClick={() => handleProductClick(prod.id)}>
-                                <img src={getImageUrl(prod.imageUrl)} alt={prod.name} className="product-image" />
-                                <h4>{prod.name}</h4>
-                                <p>{prod.description}</p>
-                                <p style={{ color: "red" }}>{prod.price.toFixed(2)} RON</p>
-                            </div>
-                        ))}
-                    </div>
-                </>
-            )}
-
-            {theme !== "dark" && (
-                <div className="send-message-container">
-                    <h3>📝 Trimite un mesaj</h3>
-                    <textarea
-                        value={messageText}
-                        onChange={(e) => setMessageText(e.target.value)}
-                        placeholder="Scrie mesajul tău aici..."
-                        className="message-textarea"
-                    />
-                    <button onClick={handleSendMessage} className="send-message-button">
-                        ✉️ Trimite
-                    </button>
-                </div>
             )}
         </div>
     );

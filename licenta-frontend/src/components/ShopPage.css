@@ -205,3 +205,57 @@
 .dark .hide-in-dark {
     display: none;
 }
+.discount-badge {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: gray;
+    font-size: 14px;
+    margin: 0;
+}
+
+.product-price.reduced {
+    color: #d9534f;
+    font-weight: bold;
+}
+/* Preț normal (violet) */
+.product-price {
+    color: #000; /* violet */
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+/* Preț vechi (tăiat) pentru produse reduse */
+.old-price {
+    text-decoration: line-through;
+    color: gray;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Preț redus (roșu) */
+.product-price.reduced {
+    color: #d9534f; /* roșu */
+    font-weight: bold;
+}
+
+/* Badge „Reducere” */
+.discount-badge {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    margin-bottom: 5px;
+    font-weight: bold;
+}

@@ -97,6 +97,7 @@ const Navbar = () => {
                         </button>
                     </li>
                     <li><Link to="/campanii" onClick={closeMenu}>🏆 Campanii</Link></li>
+                    <li><Link to="/return" onClick={closeMenu}>🔄 Retur produs</Link></li>
 
                     <hr style={{ margin: "10px 0", borderColor: "#333" }} />
 
@@ -127,6 +128,7 @@ const Navbar = () => {
                             <li><Link to="/admin/manage-discounts" onClick={closeMenu}>💸 Admin Reduceri</Link></li>
                             <li><Link to="/admin-users" onClick={closeMenu}>🚫 Admin Ban Users</Link></li>
                             <li><Link to="/admin/reward-history" onClick={closeMenu}>📅 Istoric Puncte</Link></li>
+                            <li><Link to="/admin/return-requests" onClick={closeMenu}>📥 Retururi</Link></li>
                         </>
                     )}
                 </ul>

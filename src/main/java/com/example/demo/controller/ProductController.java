@@ -13,7 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,6 +25,7 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final EmailService emailService;
     private final String uploadDir;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     public ProductController(ProductRepository productRepository, EmailService emailService) {
         this.productRepository = productRepository;
@@ -66,12 +68,13 @@ public class ProductController {
             @RequestParam String categorie,
             @RequestParam int stock,
             @RequestParam(required = false) String details,
-            @RequestParam(required = false) MultipartFile image) throws IOException {
-
+            @RequestParam(required = false) MultipartFile image
+    ) throws IOException {
         Product product = new Product();
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
+        product.setInitialPrice(price);
         product.setCategorie(Categorie.valueOf(categorie.toUpperCase()));
         product.setStock(stock);
         product.setDetails(details);
@@ -79,7 +82,6 @@ public class ProductController {
         if (image != null && !image.isEmpty()) {
             String filename = System.currentTimeMillis() + "_" + image.getOriginalFilename();
             File dest = new File(uploadDir, filename);
-            dest.getParentFile().mkdirs();
             image.transferTo(dest);
             product.setImageUrl("/uploads/" + filename);
         }
@@ -95,6 +97,7 @@ public class ProductController {
                 .orElseThrow(() -> new RuntimeException("Produsul nu există"));
         existing.setName(updatedProduct.getName());
         existing.setPrice(updatedProduct.getPrice());
+        existing.setInitialPrice(updatedProduct.getInitialPrice());
         existing.setDescription(updatedProduct.getDescription());
         existing.setCategorie(updatedProduct.getCategorie());
         existing.setStock(updatedProduct.getStock());
@@ -102,35 +105,58 @@ public class ProductController {
         return productRepository.save(existing);
     }
 
-    @PutMapping("/{id}/stock")
+    @PutMapping("/{id}/discount")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestParam int stock) {
+    public ResponseEntity<?> applyDiscount(
+            @PathVariable Long id,
+            @RequestParam(required = false) Double procent,
+            @RequestParam(required = false) Double suma,
+            @RequestParam(required = false) Integer duration
+    ) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produsul nu există"));
 
-        int newStock = product.getStock() + stock;
-        product.setStock(newStock);
-        productRepository.save(product);
-
-        if (newStock <= 5) {
-            try {
-                emailService.trimiteEmailSimplu(
-                        "stefan.emil.cocolos@gmail.com",
-                        "⚠️ ALERTĂ STOC CRITIC - " + product.getName(),
-                        "<h3>Produsul <strong>" + product.getName() + "</strong> are stoc scăzut: <strong>" + newStock + "</strong> bucăți.</h3>"
-                );
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
+        if (product.getInitialPrice() == null) {
+            product.setInitialPrice(product.getPrice());
         }
 
-        return ResponseEntity.ok("✅ Stoc actualizat cu succes!");
+        if (procent != null && procent > 0) {
+            double newPrice = product.getPrice() - (product.getPrice() * procent / 100.0);
+            product.setPrice(Math.max(newPrice, 0));
+        } else if (suma != null && suma > 0) {
+            product.setPrice(Math.max(product.getPrice() - suma, 0));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Trebuie să specifici procentul sau suma."));
+        }
+
+        productRepository.save(product);
+
+        if (duration != null && duration > 0) {
+            scheduler.schedule(() -> {
+                Product p = productRepository.findById(id).orElse(null);
+                if (p != null && p.getInitialPrice() != null) {
+                    p.setPrice(p.getInitialPrice());
+                    productRepository.save(p);
+                }
+            }, duration, TimeUnit.SECONDS);
+        }
+
+        return ResponseEntity.ok(Map.of("message", "Reducere aplicată cu succes"));
     }
 
-    @DeleteMapping("/{id}")
+    @PutMapping("/{id}/restore-price")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public void deleteProduct(@PathVariable Long id) {
-        productRepository.deleteById(id);
+    public ResponseEntity<?> restoreInitialPrice(@PathVariable Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Produsul nu există"));
+
+        if (product.getInitialPrice() != null) {
+            product.setPrice(product.getInitialPrice());
+            productRepository.save(product);
+            return ResponseEntity.ok(Map.of("message", "✅ Prețul inițial a fost restaurat."));
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "❌ Nu există preț inițial salvat pentru acest produs."));
+        }
     }
 
     @GetMapping("/low-stock")
@@ -149,26 +175,19 @@ public class ProductController {
                 .collect(Collectors.toList());
     }
 
-    @PutMapping("/{id}/discount")
+    @PutMapping("/{id}/stock")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<?> applyDiscount(
-            @PathVariable Long id,
-            @RequestParam(required = false) Double procent,
-            @RequestParam(required = false) Double suma
-    ) {
+    public ResponseEntity<?> updateStock(@PathVariable Long id, @RequestParam int stock) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Produsul nu există"));
-
-        if (procent != null && procent > 0) {
-            double newPrice = product.getPrice() - (product.getPrice() * (procent / 100.0));
-            product.setPrice(Math.max(newPrice, 0));
-        } else if (suma != null && suma > 0) {
-            product.setPrice(Math.max(product.getPrice() - suma, 0));
-        } else {
-            return ResponseEntity.badRequest().body("Trebuie să specifici procentul sau suma.");
-        }
-
+        product.setStock(product.getStock() + stock);
         productRepository.save(product);
-        return ResponseEntity.ok(product);
+        return ResponseEntity.ok("✅ Stoc actualizat cu succes!");
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public void deleteProduct(@PathVariable Long id) {
+        productRepository.deleteById(id);
     }
 }

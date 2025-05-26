@@ -3,6 +3,7 @@ package com.example.demo;
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,9 @@ public class Product {
     @Column(nullable = false)
     private double price;
 
+    @Column(name = "initial_price")
+    private Double initialPrice;
+
     @Column(name = "image_url")
     private String imageUrl;
 
@@ -45,7 +49,6 @@ public class Product {
     @Column(columnDefinition = "TEXT")
     private String details;
 
-    // ✅ AICI este modificarea: double → Double
     @Column(name = "review_score")
     private Double reviewScore = 0.0;
 

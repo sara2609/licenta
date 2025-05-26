@@ -54,10 +54,11 @@ public class SecurityConfig {
                                 "/auth/reset-password",
                                 "/uploads/**",
                                 "/api/invoice/view/**",
-                                "/api/facturi/generate"
+                                "/api/facturi/generate",
+                                "/api/returns" // POST public
                         ).permitAll()
 
-                        // ✅ Produse vizibile fără login
+                        // ✅ GET produse (fără autentificare)
                         .requestMatchers(HttpMethod.GET,
                                 "/products",
                                 "/products/{id}",
@@ -66,14 +67,18 @@ public class SecurityConfig {
                                 "/products?categorie=**"
                         ).permitAll()
 
-                        // 🔐 Adăugare/modificare produse doar pentru ADMIN
+                        // 🔐 ADMIN - retururi
+                        .requestMatchers(HttpMethod.GET, "/api/returns/all").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/returns/*/status").hasRole("ADMIN")
+
+                        // 🔐 ADMIN - produse
                         .requestMatchers("/products/add", "/products/{id}", "/products/{id}/stock", "/products/delete/**").hasRole("ADMIN")
 
-                        // ✅ Review-uri: vizualizare publică, adăugare doar logat
+                        // ✅ Review-uri
                         .requestMatchers("/reviews/product/**").permitAll()
                         .requestMatchers("/reviews/user", "/reviews/add").authenticated()
 
-                        // 🔐 Alte endpointuri cu restricții
+                        // 🔐 Alte endpointuri
                         .requestMatchers("/api/rewards/status", "/api/rewards/claim", "/api/rewards/points").hasRole("USER")
                         .requestMatchers("/api/rewards/history").hasRole("USER")
                         .requestMatchers("/admin/reward-history").hasRole("ADMIN")
@@ -82,6 +87,7 @@ public class SecurityConfig {
                         .requestMatchers("/wishlist/**", "/cart/**").authenticated()
                         .requestMatchers("/messages/send").authenticated()
 
+                        // 🔐 Orice alt request
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -1,0 +1,29 @@
+.manage-discounts {
+    padding: 20px 60px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.manage-discounts h2 {
+    margin-bottom: 20px;
+}
+
+.manage-discounts input {
+    margin-right: 10px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.manage-discounts button {
+    margin-right: 6px;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.manage-discounts button:last-of-type {
+    background-color: #d9534f;
+    color: white;
+}

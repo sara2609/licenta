@@ -1,15 +1,28 @@
-/* Navbar bar principal */
+/* 🔧 BARA DE SUS - NAVBAR */
 .navbar {
     background-color: #111;
     padding: 20px 0;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
     z-index: 1000;
 }
 
-/* Logo centrat */
+/* 🔧 BUTON ☰ MENIU STÂNGA SUS */
+.menu-toggle {
+    position: absolute;
+    left: 25px;
+    top: 24px;
+    font-size: 28px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    z-index: 1500;
+}
+
+/* 🔧 LOGO CENTRAT */
 .navbar-center-logo {
     display: flex;
     justify-content: center;
@@ -21,19 +34,7 @@
     width: auto;
 }
 
-/* Buton ☰ */
-.menu-toggle {
-    position: absolute;
-    left: 25px;
-    top: 24px;
-    font-size: 28px;
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-}
-
-/* Iconițele din dreapta sus */
+/* 🔧 ICONIȚE SUS DREAPTA */
 .navbar-icons {
     position: absolute;
     right: 25px;
@@ -53,45 +54,40 @@
     color: #1e90ff;
 }
 
-/* Fundal gri din spate */
-.backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, 0.4);
-    z-index: 1100; /* mai mare ca orice altceva */
-}
-
-/* Meniu lateral */
 .side-menu {
     position: fixed;
     top: 0;
-    left: -250px;
+    left: 0;
     width: 250px;
     height: 100vh;
     background-color: #111;
     color: white;
     padding: 60px 20px 20px;
-    transition: left 0.3s ease-in-out;
-    z-index: 1200; /* foarte mare, peste carusel și orice altceva */
+    z-index: 1200;
+
+    transform: translateX(-100%);  /* ASCUNDE BARA ÎN STÂNGA */
+    transition: transform 0.3s ease-in-out;
+    visibility: hidden; /* face complet invizibil */
+    opacity: 0;          /* și opacitate 0 */
 }
 
 .side-menu.open {
-    left: 0;
+    transform: translateX(0);      /* ADUCE BARA ÎN VIZIUNE */
+    visibility: visible;
+    opacity: 1;
 }
+
 
 .side-menu ul {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .side-menu li {
     margin: 15px 0;
 }
 
-/* Linkuri din meniu */
 .side-menu a,
 .side-menu button {
     color: white;
@@ -100,7 +96,6 @@
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
     font-family: inherit;
 }
 
@@ -109,7 +104,6 @@
     color: #1e90ff;
 }
 
-/* Titlu pentru categorii */
 .section-label {
     font-size: 16px;
     font-weight: 600;
@@ -118,7 +112,6 @@
     margin-left: 8px;
 }
 
-/* Subcategorie butoane */
 .category-button {
     background: none;
     border: none;
@@ -136,7 +129,16 @@
     color: #1e90ff;
 }
 
-/* Buton de închidere ❮ */
+.active-category {
+    background-color: #444;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    padding: 5px 10px;
+    transition: background-color 0.3s ease;
+}
+
+/* ✅ BUTON ÎNCHIDERE */
 .close-btn {
     position: absolute;
     top: 12px;
@@ -148,19 +150,13 @@
     cursor: pointer;
 }
 
-/* Stil activ pe categorie */
-.active-category {
-    background-color: #444;
-    color: white;
-    font-weight: bold;
-    border-radius: 5px;
-    padding: 5px 10px;
-    transition: background-color 0.3s ease;
-}
-
-/* 🔧 Z-index redus pentru carusel săgeți (dacă e nevoie global) */
-.carousel-button,
-.product-slider-arrow {
-    z-index: 10 !important;
-    position: relative; /* asigură layering corect */
+/* ✅ Fundal gri când meniul e deschis */
+.backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 1100;
 }

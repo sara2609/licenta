@@ -28,6 +28,8 @@ import RegisterForm from "./components/RegisterForm";
 import DailyRewardPage from "./components/DailyRewardPage";
 import RewardHistoryAdminPage from "./components/RewardHistoryAdminPage";
 import ManageDiscountsPage from "./components/ManageDiscountsPage";
+import ReturnPage from "./components/ReturnPage";
+import AdminReturnRequestsPage from "./components/AdminReturnRequestsPage";
 
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
@@ -67,8 +69,10 @@ function App() {
                                 <Route path="/admin-users" element={<><Navbar /><AdminUsersPage /></>} />
                                 <Route path="/admin/update-stock" element={<><Navbar /><UpdateStockPage /></>} />
                                 <Route path="/admin/manage-discounts" element={<><Navbar /><ManageDiscountsPage /></>} />
+                                <Route path="/admin/return-requests" element={<><Navbar /><AdminReturnRequestsPage /></>} />
                                 <Route path="/daily-reward" element={<><Navbar /><DailyRewardPage /><ChatWidget /></>} />
                                 <Route path="/admin/reward-history" element={<><Navbar /><RewardHistoryAdminPage /></>} />
+                                <Route path="/return" element={<><Navbar /><ReturnPage /></>} />
                             </Routes>
                         </Router>
                     </AuthProvider>
