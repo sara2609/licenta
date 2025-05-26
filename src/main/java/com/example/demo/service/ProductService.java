@@ -13,7 +13,6 @@ import java.util.List;
 @Transactional
 public class ProductService {
 
-
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -67,8 +66,12 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    // 🔧 Asta contează pentru salvarea produselor cu stoc nou
     public void saveProduct(Product product) {
         productRepository.save(product);
+    }
+
+    // 🔥 Sortare după reviewScore descrescător
+    public List<Product> sortByReviewScoreDesc() {
+        return productRepository.findAllByOrderByReviewScoreDesc();
     }
 }

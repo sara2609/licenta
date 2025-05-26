@@ -37,6 +37,20 @@ public class ProductController {
         return productRepository.findAll();
     }
 
+    @GetMapping(params = "categorie")
+    public List<Product> getByCategorie(@RequestParam String categorie) {
+        try {
+            return productRepository.findByCategorie(Categorie.valueOf(categorie.toUpperCase()));
+        } catch (IllegalArgumentException e) {
+            return List.of();
+        }
+    }
+
+    @GetMapping("/sort/review")
+    public List<Product> sortByReviewScoreDesc() {
+        return productRepository.findAllByOrderByReviewScoreDesc();
+    }
+
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productRepository.findById(id)
@@ -98,7 +112,6 @@ public class ProductController {
         product.setStock(newStock);
         productRepository.save(product);
 
-        // Trimite email dacă stocul e critic (<= 5)
         if (newStock <= 5) {
             try {
                 emailService.trimiteEmailSimplu(

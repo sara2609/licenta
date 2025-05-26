@@ -62,13 +62,13 @@
     background-color: #45a049;
 }
 
-/* ✅ Suprascriem cu gri plăcut ochiului pentru dark mode */
 .dark .review-item {
     background-color: #dcdcdc;
     color: #000;
 }
+
 .out-of-stock {
-    background-color: #e60000; /* roșu deschis */
+    background-color: #e60000;
     cursor: not-allowed;
     border: none;
     border-radius: 8px;
@@ -80,5 +80,29 @@
 }
 
 .out-of-stock-text {
-    color: #000; /* roșu intens */
+    color: #000;
+}
+
+/* ✅ Detalii suplimentare despre produs (memorie, SIM, OS etc.) */
+.extra-details {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f3f3f3;
+    border-left: 5px solid #4CAF50;
+    border-radius: 5px;
+}
+
+.extra-details h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.extra-details ul {
+    padding-left: 0;
+    list-style: none;
+}
+
+.extra-details li {
+    margin-bottom: 6px;
+    font-size: 16px;
 }

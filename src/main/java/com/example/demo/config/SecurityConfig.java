@@ -4,6 +4,7 @@ import com.example.demo.security.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -15,10 +16,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.*;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.List;
-import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableMethodSecurity
@@ -43,6 +45,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        // ✅ Public fără login
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
@@ -51,27 +54,37 @@ public class SecurityConfig {
                                 "/auth/reset-password",
                                 "/uploads/**",
                                 "/api/invoice/view/**",
-                                "/api/facturi/generate" // ✅ Permite generarea facturii
+                                "/api/facturi/generate"
                         ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
-                        .requestMatchers("/products/add", "/products/**").hasRole("ADMIN")
+                        // ✅ Produse vizibile fără login
+                        .requestMatchers(HttpMethod.GET,
+                                "/products",
+                                "/products/{id}",
+                                "/products/low-stock",
+                                "/products/sort/review",
+                                "/products?categorie=**"
+                        ).permitAll()
 
+                        // 🔐 Adăugare/modificare produse doar pentru ADMIN
+                        .requestMatchers("/products/add", "/products/{id}", "/products/{id}/stock", "/products/delete/**").hasRole("ADMIN")
+
+                        // ✅ Review-uri: vizualizare publică, adăugare doar logat
+                        .requestMatchers("/reviews/product/**").permitAll()
+                        .requestMatchers("/reviews/user", "/reviews/add").authenticated()
+
+                        // 🔐 Alte endpointuri cu restricții
                         .requestMatchers("/api/rewards/status", "/api/rewards/claim", "/api/rewards/points").hasRole("USER")
                         .requestMatchers("/api/rewards/history").hasRole("USER")
                         .requestMatchers("/admin/reward-history").hasRole("ADMIN")
-
                         .requestMatchers("/fidelity/**").authenticated()
-
                         .requestMatchers("/messages/all", "/messages/reply/**", "/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/wishlist/**", "/cart/**", "/reviews/user", "/reviews/add").permitAll()
+                        .requestMatchers("/wishlist/**", "/cart/**").authenticated()
                         .requestMatchers("/messages/send").authenticated()
 
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

@@ -1,10 +1,8 @@
-// Product.java
 package com.example.demo;
 
 import jakarta.persistence.*;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,7 +43,11 @@ public class Product {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String details; // 🔹 caracteristici specifice
+    private String details;
+
+    // ✅ AICI este modificarea: double → Double
+    @Column(name = "review_score")
+    private Double reviewScore = 0.0;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore

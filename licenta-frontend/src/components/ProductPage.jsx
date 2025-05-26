@@ -129,6 +129,20 @@ const ProductPage = () => {
                 {product.stock > 0 ? product.stock : <span style={{ color: "red" }}>Indisponibil</span>}
             </p>
 
+            {/* ✅ Afișăm detalii suplimentare dacă există */}
+            {product.details && (
+                <div className="extra-details">
+                    <h4>📋 Detalii specifice</h4>
+                    <ul>
+                        {Object.entries(JSON.parse(product.details)).map(([key, value]) => (
+                            <li key={key}>
+                                <strong>{key.charAt(0).toUpperCase() + key.slice(1)}:</strong> {value}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
             {product.stock > 0 ? (
                 <button onClick={handleAddToCart}>🛒 Adaugă în coș</button>
             ) : (

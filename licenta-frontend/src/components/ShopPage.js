@@ -29,7 +29,15 @@ const ShopPage = () => {
     }, [location.search]);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/products${category ? "?categorie=" + category : ""}`)
+        let url = "http://localhost:8080/products";
+
+        if (sortOrder === "review") {
+            url = "http://localhost:8080/products/sort/review";
+        } else if (category) {
+            url += `?categorie=${category}`;
+        }
+
+        fetch(url)
             .then(res => res.json())
             .then(data => {
                 setProducts(data);
@@ -45,7 +53,7 @@ const ShopPage = () => {
                 setRecentProducts(recentFiltered);
             })
             .catch(err => console.error("Eroare la preluarea produselor:", err));
-    }, [category]);
+    }, [category, sortOrder]);
 
     const handleSendMessage = async () => {
         if (!messageText.trim()) {
@@ -109,6 +117,7 @@ const ShopPage = () => {
                     <option value="">Sortează</option>
                     <option value="asc">Preț crescător</option>
                     <option value="desc">Preț descrescător</option>
+                    <option value="review">Scor recenzie</option>
                 </select>
                 <select onChange={(e) => setCategory(e.target.value)} value={category} className="category-filter">
                     <option value="">Toate categoriile</option>
