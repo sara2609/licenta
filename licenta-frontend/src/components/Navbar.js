@@ -8,7 +8,6 @@ import "./Navbar.css";
 const Navbar = () => {
     const { cartItems } = useContext(CartContext);
     const { wishlistItems } = useContext(WishlistContext);
-    const username = localStorage.getItem("username");
     const role = localStorage.getItem("role");
     const userId = localStorage.getItem("id");
 
@@ -103,6 +102,7 @@ const Navbar = () => {
 
                     <li><Link to="/my-orders" onClick={closeMenu}>📦 Comenzile mele</Link></li>
                     <li><Link to="/settings" onClick={closeMenu}>⚙️ Setări cont</Link></li>
+                    <li><Link to="/informatii" onClick={closeMenu}>ℹ️ Informații utile</Link></li>
 
                     {role === "ADMIN" && (
                         <>

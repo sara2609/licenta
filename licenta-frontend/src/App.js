@@ -30,12 +30,12 @@ import RewardHistoryAdminPage from "./components/RewardHistoryAdminPage";
 import ManageDiscountsPage from "./components/ManageDiscountsPage";
 import ReturnPage from "./components/ReturnPage";
 import AdminReturnRequestsPage from "./components/AdminReturnRequestsPage";
-
+import TermeniPage from "./components/TermeniPage"; // sau ./pages/ dacă acolo ai pus-o
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
-
+import InformatiiPage from "./components/InformatiiPage";
 function App() {
     return (
         <ThemeProvider>
@@ -73,6 +73,8 @@ function App() {
                                 <Route path="/daily-reward" element={<><Navbar /><DailyRewardPage /><ChatWidget /></>} />
                                 <Route path="/admin/reward-history" element={<><Navbar /><RewardHistoryAdminPage /></>} />
                                 <Route path="/return" element={<><Navbar /><ReturnPage /></>} />
+                                <Route path="/termeni" element={<TermeniPage />} />
+                                <Route path="/informatii" element={<InformatiiPage />} />
                             </Routes>
                         </Router>
                     </AuthProvider>
