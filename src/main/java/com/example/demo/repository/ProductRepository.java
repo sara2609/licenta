@@ -17,10 +17,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAll(Sort sort);
     List<Product> findByCategorie(Categorie categorie);
     List<Product> findTop3ByCategorieOrderBySoldDesc(Categorie categorie);
+
     @Query("SELECT p FROM Product p WHERE p.id IN :ids")
     List<Product> findByIdIn(@Param("ids") List<Long> ids);
+
     List<Product> findByStockLessThanEqual(int stock);
 
-    // 🔥 Nou: sortare după scorul de review (descrescător)
+    // 🔥 Nou: sortare după scor recenzie
     List<Product> findAllByOrderByReviewScoreDesc();
+
+    // 🔥 Nou: sortare după cele mai vândute
+    List<Product> findAllByOrderBySoldDesc();
 }

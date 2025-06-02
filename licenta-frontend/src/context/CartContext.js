@@ -30,7 +30,7 @@ export const CartProvider = ({ children }) => {
                     id: item.id,
                     productId: item.product.id,
                     name: item.product.name,
-                    price: item.product.price,
+                    price: item.matchingPrice || item.product.price,
                     quantity: item.quantity,
                     usedPoints: item.usedPoints || 0,
                     pointsApplied: item.pointsApplied || false,
@@ -60,6 +60,33 @@ export const CartProvider = ({ children }) => {
             console.error(err);
         }
     };
+
+    const addToCartWithToken = async (productId, tokenMP) => {
+        const token = localStorage.getItem("token");
+        if (!token) return alert("Trebuie să fii logat!");
+
+        try {
+            const res = await fetch(`http://localhost:8080/cart/add-with-token`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId, token: tokenMP })
+            });
+
+            if (res.ok) {
+                await fetchCart();
+                alert("✅ Produs adăugat în coș cu prețul aprobat!");
+            } else {
+                const text = await res.text();
+                alert("❌ Eroare: " + text);
+            }
+        } catch (err) {
+            console.error("❌ Eroare addToCartWithToken:", err);
+        }
+    };
+
 
     const removeFromCart = async (id) => {
         const token = localStorage.getItem("token");
@@ -125,6 +152,7 @@ export const CartProvider = ({ children }) => {
         <CartContext.Provider value={{
             cartItems,
             addToCart,
+            addToCartWithToken,
             removeFromCart,
             updateQuantity,
             applyPointsToCart,

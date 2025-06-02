@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 "/uploads/**",
                                 "/api/invoice/view/**",
                                 "/api/facturi/generate",
-                                "/api/returns" // POST public
+                                "/api/returns"
                         ).permitAll()
 
                         // ✅ GET produse (fără autentificare)
@@ -86,6 +86,16 @@ public class SecurityConfig {
                         .requestMatchers("/messages/all", "/messages/reply/**", "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/wishlist/**", "/cart/**").authenticated()
                         .requestMatchers("/messages/send").authenticated()
+
+                        // 🔐 MATCHING PRICE 🔥
+                        .requestMatchers("/api/matching-price/create").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/matching-price/user/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers(
+                                "/api/matching-price/approve/**",
+                                "/api/matching-price/reject/**",
+                                "/api/matching-price/pending"
+                        ).hasRole("ADMIN")
+                        .requestMatchers("/api/matching-price/generate-token/**").hasRole("ADMIN")
 
                         // 🔐 Orice alt request
                         .anyRequest().authenticated()

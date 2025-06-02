@@ -54,6 +54,7 @@
     color: #1e90ff;
 }
 
+/* 🔧 MENIU LATERAL */
 .side-menu {
     position: fixed;
     top: 0;
@@ -64,19 +65,35 @@
     color: white;
     padding: 60px 20px 20px;
     z-index: 1200;
-
-    transform: translateX(-100%);  /* ASCUNDE BARA ÎN STÂNGA */
+    transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    visibility: hidden; /* face complet invizibil */
-    opacity: 0;          /* și opacitate 0 */
+    visibility: hidden;
+    opacity: 0;
+
+    /* ✅ Activăm scroll vertical când conținutul depășește înălțimea */
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #888 #222;
 }
 
+/* Scrollbar pentru Chrome/Edge */
+.side-menu::-webkit-scrollbar {
+    width: 8px;
+}
+.side-menu::-webkit-scrollbar-track {
+    background: #222;
+}
+.side-menu::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 5px;
+}
+
+/* ✅ Când meniul e activ */
 .side-menu.open {
-    transform: translateX(0);      /* ADUCE BARA ÎN VIZIUNE */
+    transform: translateX(0);
     visibility: visible;
     opacity: 1;
 }
-
 
 .side-menu ul {
     list-style: none;
@@ -160,6 +177,8 @@
     background-color: rgba(0, 0, 0, 0.4);
     z-index: 1100;
 }
+
+/* 🔧 Iconiță informativă specială (ex. admin) */
 .info-icon-nav {
     background-color: #f39c12;
     color: white;

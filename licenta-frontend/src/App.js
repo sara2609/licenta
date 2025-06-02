@@ -36,6 +36,9 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import InformatiiPage from "./components/InformatiiPage";
+import MatchingPriceForm from "./components/MatchingPriceForm";
+import AdminMatchingRequestsPage from "./components/AdminMatchingRequestsPage";
+
 function App() {
     return (
         <ThemeProvider>
@@ -75,6 +78,8 @@ function App() {
                                 <Route path="/return" element={<><Navbar /><ReturnPage /></>} />
                                 <Route path="/termeni" element={<TermeniPage />} />
                                 <Route path="/informatii" element={<InformatiiPage />} />
+                                <Route path="/matching-price/request/:productId" element={<><Navbar /><MatchingPriceForm /></>} />
+                                <Route path="/admin/matching-requests" element={<><Navbar /><AdminMatchingRequestsPage /></>} />
                             </Routes>
                         </Router>
                     </AuthProvider>

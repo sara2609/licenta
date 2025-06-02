@@ -48,6 +48,10 @@ const Navbar = () => {
         }
     }, [role]);
 
+    const currentProductId = location.pathname.startsWith("/product/")
+        ? location.pathname.split("/").pop()
+        : null;
+
     return (
         <>
             <nav className="navbar">
@@ -64,7 +68,16 @@ const Navbar = () => {
                     <Link to="/cart" className="icon-link">🛒 ({cartItems.length})</Link>
                     <Link to="/account" className="icon-link">👤 Contul meu</Link>
                     {userId && (
-                        <Link to={`/fidelity-card/${userId}`} className="icon-link">💳 Card</Link>
+                        <>
+                            {role === "ADMIN" ? (
+                                <Link to="/admin/matching-requests" className="icon-link">🧾 Cereri Matching</Link>
+                            ) : (
+                                <Link to={`/fidelity-card/${userId}`} className="icon-link">💳 Card</Link>
+                            )}
+                            {currentProductId && (
+                                <Link to={`/matching-price/request/${currentProductId}`} className="icon-link">💰 Matching Price</Link>
+                            )}
+                        </>
                     )}
                 </div>
             </nav>
@@ -75,26 +88,10 @@ const Navbar = () => {
                 <button className="close-btn" onClick={closeMenu}>❮</button>
                 <ul>
                     <li className="section-label">📁 Categorii</li>
-                    <li>
-                        <button className={`category-button ${activeCategory === "" ? "active-category" : ""}`} onClick={() => handleCategoryClick("")}>
-                            🛒 Toate produsele
-                        </button>
-                    </li>
-                    <li>
-                        <button className={`category-button ${activeCategory === "telefon" ? "active-category" : ""}`} onClick={() => handleCategoryClick("telefon")}>
-                            📱 Telefoane
-                        </button>
-                    </li>
-                    <li>
-                        <button className={`category-button ${activeCategory === "tableta" ? "active-category" : ""}`} onClick={() => handleCategoryClick("tableta")}>
-                            📲 Tablete
-                        </button>
-                    </li>
-                    <li>
-                        <button className={`category-button ${activeCategory === "laptop" ? "active-category" : ""}`} onClick={() => handleCategoryClick("laptop")}>
-                            💻 Laptopuri
-                        </button>
-                    </li>
+                    <li><button className={`category-button ${activeCategory === "" ? "active-category" : ""}`} onClick={() => handleCategoryClick("")}>🛒 Toate produsele</button></li>
+                    <li><button className={`category-button ${activeCategory === "telefon" ? "active-category" : ""}`} onClick={() => handleCategoryClick("telefon")}>📱 Telefoane</button></li>
+                    <li><button className={`category-button ${activeCategory === "tableta" ? "active-category" : ""}`} onClick={() => handleCategoryClick("tableta")}>📲 Tablete</button></li>
+                    <li><button className={`category-button ${activeCategory === "laptop" ? "active-category" : ""}`} onClick={() => handleCategoryClick("laptop")}>💻 Laptopuri</button></li>
                     <li><Link to="/campanii" onClick={closeMenu}>🏆 Campanii</Link></li>
                     <li><Link to="/return" onClick={closeMenu}>🔄 Retur produs</Link></li>
 
@@ -119,9 +116,7 @@ const Navbar = () => {
                                         borderRadius: "50%",
                                         padding: "2px 6px",
                                         fontSize: "12px"
-                                    }}>
-                                        {lowStockCount}
-                                    </span>
+                                    }}>{lowStockCount}</span>
                                 )}
                             </li>
                             <li><Link to="/add-product" onClick={closeMenu}>➕ Adaugă Produs</Link></li>
@@ -129,6 +124,7 @@ const Navbar = () => {
                             <li><Link to="/admin-users" onClick={closeMenu}>🚫 Admin Ban Users</Link></li>
                             <li><Link to="/admin/reward-history" onClick={closeMenu}>📅 Istoric Puncte</Link></li>
                             <li><Link to="/admin/return-requests" onClick={closeMenu}>📥 Retururi</Link></li>
+                            <li><Link to="/admin/matching-requests" onClick={closeMenu}>🧾 Cereri Matching Price</Link></li>
                         </>
                     )}
                 </ul>

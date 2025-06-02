@@ -112,6 +112,20 @@ public class CartController {
         }
     }
 
+    @PostMapping("/add-with-token")
+    public ResponseEntity<String> addToCartWithToken(@RequestBody Map<String, Object> payload, Principal principal) {
+        try {
+            String username = principal.getName();
+            Long productId = Long.parseLong(payload.get("productId").toString());
+            String token = payload.get("token").toString();
+
+            cartService.addToCartWithToken(username, productId, token);
+            return ResponseEntity.ok("✅ Produs adăugat în coș cu Matching Price!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("❌ Eroare la adăugare cu token: " + e.getMessage());
+        }
+    }
+
     @PutMapping("/update/{cartItemId}")
     public ResponseEntity<String> updateQuantity(@PathVariable Long cartItemId, @RequestParam int quantity) {
         Optional<CartItem> optionalItem = cartRepository.findById(cartItemId);

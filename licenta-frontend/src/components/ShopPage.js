@@ -14,7 +14,6 @@ const ShopPage = () => {
     const [search, setSearch] = useState("");
     const [sortOrder, setSortOrder] = useState("");
     const [category, setCategory] = useState("");
-    const [messageText, setMessageText] = useState("");
 
     const { addToCart } = useContext(CartContext);
     const { addToWishlist } = useContext(WishlistContext);
@@ -29,54 +28,64 @@ const ShopPage = () => {
     }, [location.search]);
 
     useEffect(() => {
-        let url = "http://localhost:8080/products";
+        const fetchProductsAndTokens = async () => {
+            try {
+                let url = "http://localhost:8080/products";
 
-        if (sortOrder === "review") {
-            url = "http://localhost:8080/products/sort/review";
-        } else if (category) {
-            url += `?categorie=${category}`;
-        }
+                if (sortOrder === "review") {
+                    url = "http://localhost:8080/products/sort/review";
+                } else if (sortOrder === "sold") {
+                    url = "http://localhost:8080/products/sort/sold";
+                } else if (category) {
+                    url += `?categorie=${category}`;
+                }
 
-        fetch(url)
-            .then(res => res.json())
-            .then(data => {
-                setProducts(data);
-                const recommended = data.sort((a, b) => b.price - a.price).slice(0, 3);
+                const resProducts = await fetch(url);
+                const data = await resProducts.json();
+
+                const token = localStorage.getItem("token");
+                const userId = localStorage.getItem("id");
+
+                let tokens = [];
+                if (token && userId) {
+                    const resTokens = await fetch(`http://localhost:8080/api/matching-price/tokens/user/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    if (resTokens.ok) {
+                        tokens = await resTokens.json();
+                    }
+                }
+
+                const adjustedProducts = Array.isArray(data) ? data.map(p => {
+                    if (!p || !p.id) return p;
+                    const match = tokens.find(t => t.productId === p.id);
+                    if (match) {
+                        return {
+                            ...p,
+                            initialPrice: p.price,
+                            price: match.approvedPrice
+                        };
+                    }
+                    return p;
+                }) : [];
+
+                setProducts(adjustedProducts);
+
+                const recommended = [...adjustedProducts]
+                    .sort((a, b) => b.sold - a.sold)
+                    .slice(0, 3);
                 setRecommendedProducts(recommended);
 
-                let ids = JSON.parse(localStorage.getItem("recentProducts")) || [];
-                if (ids.length === 0 && data.length >= 2) {
-                    ids = [data[0].id, data[1].id];
-                    localStorage.setItem("recentProducts", JSON.stringify(ids));
-                }
-                const recentFiltered = data.filter(p => ids.includes(p.id));
+                const ids = JSON.parse(localStorage.getItem("recentProducts")) || [];
+                const recentFiltered = adjustedProducts.filter(p => ids.includes(p.id));
                 setRecentProducts(recentFiltered);
-            })
-            .catch(err => console.error("Eroare la preluarea produselor:", err));
-    }, [category, sortOrder]);
-
-    const handleSendMessage = async () => {
-        if (!messageText.trim()) {
-            alert("Scrie un mesaj înainte de a trimite!");
-            return;
-        }
-        try {
-            const response = await fetch("http://localhost:8080/messages/send", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ senderEmail: "anonim@example.com", content: messageText })
-            });
-            if (response.ok) {
-                alert("✅ Mesaj trimis cu succes!");
-                setMessageText("");
-            } else {
-                throw new Error("Eroare la trimiterea mesajului");
+            } catch (err) {
+                console.error("❌ Eroare la fetch produse + token:", err);
             }
-        } catch (error) {
-            console.error(error);
-            alert("❌ Eroare la trimiterea mesajului!");
-        }
-    };
+        };
+
+        fetchProductsAndTokens();
+    }, [category, sortOrder]);
 
     const handleProductClick = (id) => {
         navigate(`/product/${id}`);
@@ -118,6 +127,7 @@ const ShopPage = () => {
                     <option value="asc">Preț crescător</option>
                     <option value="desc">Preț descrescător</option>
                     <option value="review">Scor recenzie</option>
+                    <option value="sold">Cele mai vândute</option>
                 </select>
                 <select onChange={(e) => setCategory(e.target.value)} value={category} className="category-filter">
                     <option value="">Toate categoriile</option>
@@ -151,43 +161,47 @@ const ShopPage = () => {
                             ) : (
                                 <p className="product-price">{product.price.toFixed(2)} RON</p>
                             )}
-
-                            <div className="product-actions">
-                                {product.stock > 0 ? (
-                                    <button
-                                        className="cart-button"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            addToCart(product);
-                                            alert("✅ Produs adăugat în coș!");
-                                        }}
-                                    >
-                                        🛒 În coș
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="cart-button"
-                                        disabled
-                                        style={{ backgroundColor: "gray", cursor: "not-allowed", color: "white" }}
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        Stoc epuizat
-                                    </button>
-                                )}
-                                <button
-                                    className="wishlist-button"
-                                    onClick={async (e) => {
-                                        e.stopPropagation();
-                                        const result = await addToWishlist(product);
-                                        if (result) alert(result);
-                                    }}
-                                >
-                                    ❤️
-                                </button>
-                            </div>
                         </div>
                     ))}
                 </Carousel>
+            )}
+
+            {recommendedProducts.length > 0 && (
+                <>
+                    <h3 className="shop-title">🔥 Recomandate</h3>
+                    <div className="recommended-container">
+                        {recommendedProducts.map(product => (
+                            <div
+                                key={product.id}
+                                className="product-card"
+                                onClick={() => handleProductClick(product.id)}
+                            >
+                                <img src={getImageUrl(product.imageUrl)} alt={product.name} className="product-image" />
+                                <h3 className="product-name">{product.name}</h3>
+                                <p className="product-price">{product.price.toFixed(2)} RON</p>
+                            </div>
+                        ))}
+                    </div>
+                </>
+            )}
+
+            {recentProducts.length > 0 && (
+                <>
+                    <h3 className="shop-title">🕓 Vizualizate Recent</h3>
+                    <div className="recent-container">
+                        {recentProducts.map(product => (
+                            <div
+                                key={product.id}
+                                className="product-card"
+                                onClick={() => handleProductClick(product.id)}
+                            >
+                                <img src={getImageUrl(product.imageUrl)} alt={product.name} className="product-image" />
+                                <h3 className="product-name">{product.name}</h3>
+                                <p className="product-price">{product.price.toFixed(2)} RON</p>
+                            </div>
+                        ))}
+                    </div>
+                </>
             )}
         </div>
     );
