@@ -45,7 +45,6 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        // ✅ Public fără login
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
@@ -55,10 +54,10 @@ public class SecurityConfig {
                                 "/uploads/**",
                                 "/api/invoice/view/**",
                                 "/api/facturi/generate",
-                                "/api/returns"
+                                "/api/returns",
+                                "/payment/**"
                         ).permitAll()
-
-                        // ✅ GET produse (fără autentificare)
+                        .requestMatchers("/installments/create").authenticated() // ✅ ADĂUGAT
                         .requestMatchers(HttpMethod.GET,
                                 "/products",
                                 "/products/{id}",
@@ -66,19 +65,11 @@ public class SecurityConfig {
                                 "/products/sort/review",
                                 "/products?categorie=**"
                         ).permitAll()
-
-                        // 🔐 ADMIN - retururi
                         .requestMatchers(HttpMethod.GET, "/api/returns/all").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/returns/*/status").hasRole("ADMIN")
-
-                        // 🔐 ADMIN - produse
                         .requestMatchers("/products/add", "/products/{id}", "/products/{id}/stock", "/products/delete/**").hasRole("ADMIN")
-
-                        // ✅ Review-uri
                         .requestMatchers("/reviews/product/**").permitAll()
                         .requestMatchers("/reviews/user", "/reviews/add").authenticated()
-
-                        // 🔐 Alte endpointuri
                         .requestMatchers("/api/rewards/status", "/api/rewards/claim", "/api/rewards/points").hasRole("USER")
                         .requestMatchers("/api/rewards/history").hasRole("USER")
                         .requestMatchers("/admin/reward-history").hasRole("ADMIN")
@@ -86,8 +77,6 @@ public class SecurityConfig {
                         .requestMatchers("/messages/all", "/messages/reply/**", "/admin/**").hasRole("ADMIN")
                         .requestMatchers("/wishlist/**", "/cart/**").authenticated()
                         .requestMatchers("/messages/send").authenticated()
-
-                        // 🔐 MATCHING PRICE 🔥
                         .requestMatchers("/api/matching-price/create").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/api/matching-price/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers(
@@ -96,8 +85,6 @@ public class SecurityConfig {
                                 "/api/matching-price/pending"
                         ).hasRole("ADMIN")
                         .requestMatchers("/api/matching-price/generate-token/**").hasRole("ADMIN")
-
-                        // 🔐 Orice alt request
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

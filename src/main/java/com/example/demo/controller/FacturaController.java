@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.Factura;
+import com.example.demo.FacturaDTO;
 import com.example.demo.model.Comanda;
 import com.example.demo.repository.FacturaRepository;
 import com.example.demo.service.FacturaService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +28,25 @@ public class FacturaController {
     }
 
     @GetMapping("/email/{email}")
-    public List<Factura> getFacturiByEmail(@PathVariable String email) {
-        return facturaRepository.findByEmail(email);
+    public ResponseEntity<List<FacturaDTO>> getFacturiByEmail(@PathVariable String email) {
+        List<Factura> facturi = facturaRepository.findByEmail(email);
+
+        List<FacturaDTO> rezultat = facturi.stream().map(factura -> {
+            String rateSummary = facturaService.getRateSummaryForOrder(factura.getOrderId());
+
+            return FacturaDTO.builder()
+                    .id(factura.getId())
+                    .orderId(factura.getOrderId())
+                    .clientName(factura.getClientName())
+                    .email(factura.getEmail())
+                    .total(factura.getTotal())
+                    .filePath(factura.getFilePath())
+                    .dataEmitere(factura.getDataEmitere())
+                    .rateSummary(rateSummary)
+                    .build();
+        }).toList();
+
+        return ResponseEntity.ok(rezultat);
     }
 
     @PostMapping("/generate")
@@ -42,4 +59,3 @@ public class FacturaController {
         }
     }
 }
-

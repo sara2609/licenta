@@ -17,18 +17,30 @@ public class PaymentService {
         Stripe.apiKey = secretKey;
     }
 
-    public Map<String, String> createPaymentIntent(long amount) throws StripeException {
+    public Map<String, String> createPaymentIntent(long amount, Integer months) throws StripeException {
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                        .setAmount(amount * 100)  // Stripe folosește cenți, deci trebuie să multiplici suma
+                        .setAmount(amount * 100)  // Stripe cere suma în cenți
                         .setCurrency("usd")
-                        .addPaymentMethodType("card") // ✅ SOLUȚIA CORECTĂ!
+                        .addPaymentMethodType("card")
                         .build();
 
         PaymentIntent intent = PaymentIntent.create(params);
+        String secret = intent.getClientSecret();
+
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("❌ ClientSecret nu a fost generat de Stripe.");
+        }
 
         Map<String, String> response = new HashMap<>();
-        response.put("clientSecret", intent.getClientSecret());
+        response.put("clientSecret", secret);
+
+        if (months != null && months > 1) {
+            double monthly = (double) amount / months;
+            response.put("monthlyAmount", String.format("%.2f", monthly));
+        }
+
         return response;
     }
+
 }

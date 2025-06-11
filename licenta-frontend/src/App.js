@@ -63,7 +63,7 @@ function App() {
                                 <Route path="/payment-card" element={<><Navbar /><PaymentCardPage /><ChatWidget /></>} />
                                 <Route path="/payment-crypto" element={<><Navbar /><PaymentCryptoPage /><ChatWidget /></>} />
                                 <Route path="/checkout" element={<><Navbar /><CheckoutPage /><ChatWidget /></>} />
-                                <Route path="/stripe-checkout" element={<><Navbar /><StripeCheckoutPage /><ChatWidget /></>} />
+                                <Route path="/stripe-payment" element={<><Navbar /><StripeCheckoutPage /><ChatWidget /></>} />
                                 <Route path="/product/:id" element={<><Navbar /><ProductPage /><ChatWidget /></>} />
                                 <Route path="/campanii" element={<><Navbar /><CampaniiPage /><ChatWidget /></>} />
                                 <Route path="/fidelity/qr-view" element={<FidelityQRView />} />

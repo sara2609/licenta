@@ -73,7 +73,7 @@ public class CartService {
     }
 
     @Transactional
-    public void processOrder(User user) {
+    public void processOrder(User user, String paymentMethod) {
         List<CartItem> items = cartRepository.findByUserWithProduct(user);
 
         for (CartItem item : items) {
@@ -84,7 +84,6 @@ public class CartService {
                 throw new RuntimeException("Stoc insuficient pentru: " + product.getName());
             }
 
-            // ✅ Folosește matchingPrice dacă este setat, altfel prețul normal
             double pricePerUnit = item.getMatchingPrice() != null ? item.getMatchingPrice() : product.getPrice();
 
             System.out.printf("Produs %s: %.2f RON x %d bucăți%n", product.getName(), pricePerUnit, quantity);
@@ -94,8 +93,12 @@ public class CartService {
             productRepository.save(product);
         }
 
-        clearCart(user);
+        // 🛑 Coșul se golește doar pentru plata cash
+        if ("cash".equalsIgnoreCase(paymentMethod)) {
+            clearCart(user);
+        }
     }
+
 
     @Transactional
     public void clearCart(User user) {

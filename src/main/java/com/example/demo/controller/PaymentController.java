@@ -21,10 +21,11 @@ public class PaymentController {
     public ResponseEntity<Map<String, String>> createPayment(@RequestBody Map<String, Object> payload) {
         try {
             long amount = ((Number) payload.get("amount")).longValue();
-            return ResponseEntity.ok(paymentService.createPaymentIntent(amount));
+            Integer months = payload.get("months") != null ? ((Number) payload.get("months")).intValue() : null;
+
+            return ResponseEntity.ok(paymentService.createPaymentIntent(amount, months));
         } catch (StripeException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 }
-

@@ -1,12 +1,12 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { ThemeContext } from "../context/ThemeContext"; // ✅ Importă contextul temei
+import { ThemeContext } from "../context/ThemeContext";
 import "./MyOrdersPage.css";
 
 const MyOrdersPage = () => {
     const [orders, setOrders] = useState([]);
     const navigate = useNavigate();
-    const { theme } = useContext(ThemeContext); // ✅ Preia tema curentă
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -35,7 +35,8 @@ const MyOrdersPage = () => {
                             price: parseFloat(factura.total)
                         }
                     ],
-                    total: parseFloat(factura.total)
+                    total: parseFloat(factura.total),
+                    rate: factura.rateSummary || null
                 }));
                 setOrders(transformed);
             })
@@ -63,6 +64,9 @@ const MyOrdersPage = () => {
                             ))}
                         </ul>
                         <p><strong>Total:</strong> {order.total.toFixed(2)} RON</p>
+                        {order.rate && (
+                            <p><strong>Plată în rate:</strong> {order.rate}</p>
+                        )}
                     </div>
                 ))
             )}

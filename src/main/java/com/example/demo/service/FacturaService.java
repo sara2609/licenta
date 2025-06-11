@@ -4,6 +4,7 @@ import com.example.demo.Factura;
 import com.example.demo.model.Comanda;
 import com.example.demo.model.ComandaProdus;
 import com.example.demo.repository.FacturaRepository;
+import com.example.demo.repository.OrderRepository;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -25,6 +26,9 @@ public class FacturaService {
 
     @Autowired
     private FacturaRepository facturaRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
     public byte[] genereazaFacturaPDF(Comanda comanda) throws Exception {
         Document document = new Document();
@@ -91,5 +95,11 @@ public class FacturaService {
                 .build();
 
         facturaRepository.save(factura);
+    }
+
+    public String getRateSummaryForOrder(String orderId) {
+        return orderRepository.findByOrderId(orderId)
+                .flatMap(c -> c.getRateSummary())
+                .orElse(null);
     }
 }

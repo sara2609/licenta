@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "orders")
@@ -26,7 +27,19 @@ public class ComandaEntity {
 
     private String total;
 
-    private String cupon; // poate fi null
+    private String cupon;
 
     private LocalDateTime dataComenzii;
+
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private InstallmentPlan installmentPlan;
+
+    public Optional<String> getRateSummary() {
+        if (installmentPlan == null) return Optional.empty();
+
+        String lunar = installmentPlan.getMonthlyAmount()
+                .setScale(2, java.math.RoundingMode.HALF_UP)
+                .toPlainString();
+        return Optional.of(lunar + " RON x " + installmentPlan.getMonths() + " luni");
+    }
 }

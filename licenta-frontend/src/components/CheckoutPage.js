@@ -1,7 +1,6 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-import StripeCheckoutPage from "./StripeCheckoutPage";
 import "./CheckoutPage.css";
 
 const CheckoutPage = () => {
@@ -12,8 +11,7 @@ const CheckoutPage = () => {
         country: "România", delivery: "curier", easyboxCode: "",
         payment: "cash", coupon: ""
     });
-
-    const [showStripe, setShowStripe] = useState(false);
+    const [months, setMonths] = useState(""); // ✅ Nou
     const [finalTotal, setFinalTotal] = useState(null);
     const navigate = useNavigate();
 
@@ -28,7 +26,7 @@ const CheckoutPage = () => {
         return sum + itemTotal;
     }, 0);
 
-    const totalToDisplay = Number(finalTotal ?? localTotal ?? 0); // 👈 Evită crash-ul .toFixed()
+    const totalToDisplay = Number(finalTotal ?? localTotal ?? 0);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -41,7 +39,11 @@ const CheckoutPage = () => {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token}`
-                }
+                },
+                body: JSON.stringify({
+                    payment: formData.payment,
+                    months: formData.payment === "card" ? parseInt(months) : null // ✅ Trimitere lunară doar pt card
+                })
             });
 
             if (!checkoutRes.ok) {
@@ -51,7 +53,12 @@ const CheckoutPage = () => {
             }
 
             const { total: totalFromServer } = await checkoutRes.json();
-            setFinalTotal(Number(totalFromServer)); // 👈 Convertim la număr
+            if (!totalFromServer || isNaN(totalFromServer)) {
+                alert("❌ Total invalid primit de la server.");
+                return;
+            }
+
+            setFinalTotal(Number(totalFromServer));
 
             const comanda = {
                 orderId,
@@ -66,18 +73,26 @@ const CheckoutPage = () => {
                 }))
             };
 
-            const facturaRes = await fetch("http://localhost:8080/api/facturi/generate", {
+            await fetch("http://localhost:8080/api/facturi/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(comanda)
             });
 
-            if (!facturaRes.ok) throw new Error("❌ Eroare la generarea facturii.");
-
-            clearCart();
-            alert("✅ Comanda plasată și factura trimisă pe email!");
+            localStorage.setItem("orderId", orderId);
             localStorage.setItem("email", formData.email);
-            navigate("/my-orders");
+            localStorage.setItem("name", `${formData.firstName} ${formData.lastName}`);
+            localStorage.setItem("zip", formData.zip);
+            localStorage.setItem("total", String(totalFromServer));
+            localStorage.setItem("months", months || "");
+
+            if (formData.payment === "card") {
+                navigate("/stripe-payment");
+            } else {
+                clearCart();
+                alert("✅ Comanda plasată și factura trimisă pe email!");
+                navigate("/my-orders");
+            }
         } catch (err) {
             console.error(err);
             alert("❌ Eroare la conectarea cu serverul!");
@@ -114,6 +129,23 @@ const CheckoutPage = () => {
                     <option value="card">Card bancar</option>
                 </select>
 
+                {formData.payment === "card" && (
+                    <>
+                        <label>📅 Perioadă plată în rate:</label>
+                        <select value={months} onChange={(e) => setMonths(e.target.value)} required>
+                            <option value="">Alege perioada</option>
+                            <option value="6">6 luni</option>
+                            <option value="12">12 luni</option>
+                            <option value="18">18 luni</option>
+                            <option value="24">24 luni</option>
+                            <option value="36">36 luni</option>
+                        </select>
+                        {months && (
+                            <p>Rată estimată: {(totalToDisplay / months).toFixed(2)} RON/lună</p>
+                        )}
+                    </>
+                )}
+
                 <label>🏷️ Cupon:</label>
                 <input name="coupon" value={formData.coupon} onChange={handleChange} placeholder="Introdu cuponul" />
 
@@ -123,13 +155,6 @@ const CheckoutPage = () => {
                     Plasează comanda și primește factura
                 </button>
             </form>
-
-            {showStripe && (
-                <div className="stripe-checkout">
-                    <h3>💳 Plata cu cardul</h3>
-                    <StripeCheckoutPage amount={totalToDisplay} />
-                </div>
-            )}
         </div>
     );
 };

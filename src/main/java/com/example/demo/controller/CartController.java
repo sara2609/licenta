@@ -10,9 +10,11 @@ import com.example.demo.repository.DailyRewardRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.CartService;
+import com.example.demo.service.InstallmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -27,17 +29,20 @@ public class CartController {
     private final OrderRepository orderRepository;
     private final DailyRewardRepository dailyRewardRepository;
     private final CartRepository cartRepository;
+    private final InstallmentService installmentService;
 
     public CartController(CartService cartService,
                           UserRepository userRepository,
                           OrderRepository orderRepository,
                           DailyRewardRepository dailyRewardRepository,
-                          CartRepository cartRepository) {
+                          CartRepository cartRepository,
+                          InstallmentService installmentService) {
         this.cartService = cartService;
         this.userRepository = userRepository;
         this.orderRepository = orderRepository;
         this.dailyRewardRepository = dailyRewardRepository;
         this.cartRepository = cartRepository;
+        this.installmentService = installmentService;
     }
 
     @PostMapping("/apply-points")
@@ -51,8 +56,9 @@ public class CartController {
     }
 
     @PostMapping("/checkout")
-    public ResponseEntity<Map<String, Object>> checkout(Principal principal) {
+    public ResponseEntity<Map<String, Object>> checkout(@RequestBody Map<String, Object> payload, Principal principal) {
         String username = principal.getName();
+        String payment = (String) payload.get("payment");
 
         User user = userRepository.findByUsername(username)
                 .or(() -> userRepository.findByEmail(username))
@@ -92,11 +98,26 @@ public class CartController {
                 .build();
 
         orderRepository.save(entity);
-        cartService.processOrder(user);
+
+        // ✅ Salvează plan de rate dacă e trimis din payload
+        if (payload.containsKey("months")) {
+            Object monthsObj = payload.get("months");
+            if (monthsObj != null) {
+                try {
+                    int months = Integer.parseInt(monthsObj.toString());
+                    installmentService.createInstallmentPlan(orderId, months, BigDecimal.valueOf(total));
+                } catch (Exception e) {
+                    System.out.println("❌ Eroare la salvarea planului de rate: " + e.getMessage());
+                }
+            }
+        }
+
+        cartService.processOrder(user, payment);
 
         Map<String, Object> response = new HashMap<>();
         response.put("message", "✅ Comanda finalizată cu succes!");
         response.put("total", String.format("%.2f", total));
+        response.put("orderId", orderId); // ✅ Poate fi util în frontend
 
         return ResponseEntity.ok(response);
     }
@@ -155,5 +176,16 @@ public class CartController {
     public ResponseEntity<List<CartItem>> getCart(Principal principal) {
         String username = principal.getName();
         return ResponseEntity.ok(cartService.getCartItems(username));
+    }
+
+    @PostMapping("/clear-after-payment")
+    public ResponseEntity<String> clearCartAfterPayment(Principal principal) {
+        String username = principal.getName();
+        User user = userRepository.findByUsername(username)
+                .or(() -> userRepository.findByEmail(username))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        cartService.clearCart(user);
+        return ResponseEntity.ok("✅ Coșul a fost golit după plata cu cardul!");
     }
 }
