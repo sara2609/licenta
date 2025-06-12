@@ -36,13 +36,17 @@ public class CartItem {
     @Column(nullable = false)
     private double appliedDiscount = 0.0;
 
-    // ✅ Noul câmp pentru prețul aprobat prin Matching Price
-    @Column(name = "matching_price")
+    @Column(name = "matching_price", insertable = true, updatable = true)
     private Double matchingPrice;
 
     public CartItem(User user, Product product, int quantity) {
         this.user = user;
         this.product = product;
         this.quantity = quantity;
+    }
+
+    // ✅ Nou: returnează prețul efectiv (cu matching price dacă există)
+    public double getEffectivePrice() {
+        return matchingPrice != null ? matchingPrice : product.getPrice();
     }
 }

@@ -13,6 +13,7 @@ import com.example.demo.service.CartService;
 import com.example.demo.service.InstallmentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.demo.CartItemDTO;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -71,8 +72,9 @@ public class CartController {
 
         int totalUsedPoints = cartItems.stream().mapToInt(CartItem::getUsedPoints).sum();
 
+        // ✅ Folosește prețul real (matching dacă există)
         double total = cartItems.stream()
-                .mapToDouble(item -> item.getProduct().getPrice() * item.getQuantity() - item.getAppliedDiscount())
+                .mapToDouble(item -> item.getEffectivePrice() * item.getQuantity() - item.getAppliedDiscount())
                 .sum();
 
         dailyRewardRepository.findByUserId(user.getUserId()).ifPresent(reward -> {
@@ -84,7 +86,7 @@ public class CartController {
         List<ComandaProdus> produse = cartItems.stream()
                 .map(item -> new ComandaProdus(
                         item.getProduct().getName(),
-                        String.format("%.2f", item.getProduct().getPrice()),
+                        String.format("%.2f", item.getEffectivePrice()),
                         item.getQuantity()))
                 .toList();
 
@@ -121,6 +123,7 @@ public class CartController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @PostMapping("/add/{productId}")
     public ResponseEntity<String> addToCart(@PathVariable Long productId, Principal principal) {
@@ -173,10 +176,11 @@ public class CartController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CartItem>> getCart(Principal principal) {
+    public ResponseEntity<List<CartItemDTO>> getCart(Principal principal) {
         String username = principal.getName();
-        return ResponseEntity.ok(cartService.getCartItems(username));
+        return ResponseEntity.ok(cartService.getCartItemsDTO(username));
     }
+
 
     @PostMapping("/clear-after-payment")
     public ResponseEntity<String> clearCartAfterPayment(Principal principal) {

@@ -35,7 +35,7 @@ public class MatchingPriceTokenService {
         token.setProduct(request.getProduct());
         token.setApprovedPrice(request.getRequestedPrice());
         token.setCreatedAt(LocalDateTime.now());
-        token.setValidUntil(LocalDateTime.now().plusHours(24)); // token valabil 24h
+        token.setValidUntil(LocalDateTime.now().plusHours(24));
 
         tokenRepository.save(token);
         return token.getToken();
@@ -46,10 +46,9 @@ public class MatchingPriceTokenService {
                 .filter(t -> t.getValidUntil().isAfter(LocalDateTime.now()))
                 .filter(t -> t.getUser().getUserId().equals(userId))
                 .filter(t -> t.getProduct().getId().equals(productId))
-                .orElseThrow(() -> new RuntimeException("Token invalid sau expirat"));
+                .orElse(null);
     }
 
-    // 🔥 NOU: Obține tokenuri active ale unui user
     public List<MatchingPriceToken> getActiveTokensForUser(Long userId) {
         LocalDateTime now = LocalDateTime.now();
         return tokenRepository.findAll().stream()
@@ -57,4 +56,11 @@ public class MatchingPriceTokenService {
                 .filter(t -> t.getValidUntil().isAfter(now))
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public void invalidateToken(Long userId, Long productId) {
+        List<MatchingPriceToken> tokens = tokenRepository.findByUserUserIdAndProduct_Id(userId, productId);
+        tokenRepository.deleteAll(tokens); // ✅ șterge toate tokenurile valabile pentru acel user și produs
+    }
+
 }

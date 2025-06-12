@@ -30,21 +30,23 @@ import RewardHistoryAdminPage from "./components/RewardHistoryAdminPage";
 import ManageDiscountsPage from "./components/ManageDiscountsPage";
 import ReturnPage from "./components/ReturnPage";
 import AdminReturnRequestsPage from "./components/AdminReturnRequestsPage";
-import TermeniPage from "./components/TermeniPage"; // sau ./pages/ dacă acolo ai pus-o
-import { CartProvider } from "./context/CartContext";
-import { WishlistProvider } from "./context/WishlistContext";
-import { ThemeProvider } from "./context/ThemeContext";
-import { AuthProvider } from "./context/AuthContext";
+import TermeniPage from "./components/TermeniPage";
 import InformatiiPage from "./components/InformatiiPage";
 import MatchingPriceForm from "./components/MatchingPriceForm";
 import AdminMatchingRequestsPage from "./components/AdminMatchingRequestsPage";
 
+// 🔁 Contexts (ORDINEA CONTEAZĂ!)
+import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
+import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+
 function App() {
     return (
         <ThemeProvider>
-            <WishlistProvider>
+            <AuthProvider> {/* Trebuie să fie ÎNAINTEA CartProvider */}
                 <CartProvider>
-                    <AuthProvider>
+                    <WishlistProvider>
                         <Router>
                             <Routes>
                                 <Route path="/" element={<LoginForm />} />
@@ -82,9 +84,9 @@ function App() {
                                 <Route path="/admin/matching-requests" element={<><Navbar /><AdminMatchingRequestsPage /></>} />
                             </Routes>
                         </Router>
-                    </AuthProvider>
+                    </WishlistProvider>
                 </CartProvider>
-            </WishlistProvider>
+            </AuthProvider>
         </ThemeProvider>
     );
 }

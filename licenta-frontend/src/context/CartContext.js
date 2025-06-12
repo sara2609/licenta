@@ -28,14 +28,16 @@ export const CartProvider = ({ children }) => {
                 const data = await res.json();
                 setCartItems(data.map(item => ({
                     id: item.id,
-                    productId: item.product.id,
-                    name: item.product.name,
-                    price: item.matchingPrice || item.product.price,
+                    productId: item.productId,
+                    name: item.name,
+                    price: item.price,
+                    originalPrice: item.originalPrice,
                     quantity: item.quantity,
                     usedPoints: item.usedPoints || 0,
                     pointsApplied: item.pointsApplied || false,
                     appliedDiscount: item.appliedDiscount || 0.0
                 })));
+
             }
         } catch (err) {
             console.error("❌ Eroare la fetch cart:", err);
@@ -86,7 +88,6 @@ export const CartProvider = ({ children }) => {
             console.error("❌ Eroare addToCartWithToken:", err);
         }
     };
-
 
     const removeFromCart = async (id) => {
         const token = localStorage.getItem("token");

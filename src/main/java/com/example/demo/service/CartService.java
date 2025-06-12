@@ -1,10 +1,7 @@
 package com.example.demo.service;
 
-import com.example.demo.CartItem;
-import com.example.demo.Product;
-import com.example.demo.User;
+import com.example.demo.*;
 import com.example.demo.model.DailyReward;
-import com.example.demo.MatchingPriceToken;
 import com.example.demo.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +27,34 @@ public class CartService {
         this.productRepository = productRepository;
         this.dailyRewardRepository = dailyRewardRepository;
         this.matchingPriceTokenService = matchingPriceTokenService;
+    }
+
+    public List<CartItemDTO> getCartItemsDTO(String username) {
+        User user = userRepository.findByUsername(username)
+                .or(() -> userRepository.findByEmail(username))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<CartItem> items = cartRepository.findByUserWithProduct(user);
+
+        return items.stream().map(item -> CartItemDTO.builder()
+                .id(item.getId())
+                .productId(item.getProduct().getId())
+                .name(item.getProduct().getName())
+                .quantity(item.getQuantity())
+                .price(item.getMatchingPrice() != null ? item.getMatchingPrice() : item.getProduct().getPrice())
+                .originalPrice(item.getProduct().getPrice())
+                .usedPoints(item.getUsedPoints())
+                .pointsApplied(item.isPointsApplied())
+                .appliedDiscount(item.getAppliedDiscount())
+                .build()
+        ).toList();
+    }
+
+    public List<CartItem> getCartItems(String username) {
+        User user = userRepository.findByUsername(username)
+                .or(() -> userRepository.findByEmail(username))
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return cartRepository.findByUserWithProduct(user);
     }
 
     @Transactional
@@ -93,24 +118,24 @@ public class CartService {
             productRepository.save(product);
         }
 
-        // 🛑 Coșul se golește doar pentru plata cash
+        // 🔥 INVALIDARE TOKENURI DUPĂ FOLOSIRE
+        for (CartItem item : items) {
+            if (item.getMatchingPrice() != null) {
+                matchingPriceTokenService.invalidateToken(user.getUserId(), item.getProduct().getId());
+            }
+        }
+
         if ("cash".equalsIgnoreCase(paymentMethod)) {
             clearCart(user);
         }
     }
 
 
+
     @Transactional
     public void clearCart(User user) {
         List<CartItem> items = cartRepository.findByUser(user);
         cartRepository.deleteAll(items);
-    }
-
-    public List<CartItem> getCartItems(String username) {
-        User user = userRepository.findByUsername(username)
-                .or(() -> userRepository.findByEmail(username))
-                .orElseThrow(() -> new RuntimeException("User not found"));
-        return cartRepository.findByUserWithProduct(user);
     }
 
     @Transactional
@@ -123,19 +148,24 @@ public class CartService {
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
         Optional<CartItem> existingItemOpt = cartRepository.findByUserAndProduct(user, product);
-        CartItem item;
-        if (existingItemOpt.isPresent()) {
-            item = existingItemOpt.get();
-            item.setQuantity(item.getQuantity() + 1);
-        } else {
-            item = new CartItem(user, product, 1);
-            item.setUsedPoints(0);
-            item.setAppliedDiscount(0);
-            item.setPointsApplied(false);
-        }
+        CartItem item = existingItemOpt.orElse(new CartItem(user, product, 0));
+
+        item.setQuantity(item.getQuantity() + 1);
+
+        // 🔥 Nou: verificăm dacă există token valid pentru acest produs + user
+        matchingPriceTokenService.getActiveTokensForUser(user.getUserId()).stream()
+                .filter(t -> t.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(token -> item.setMatchingPrice(token.getApprovedPrice()));
+
+        // 🧼 Resetăm orice puncte sau discount aplicat anterior
+        item.setUsedPoints(0);
+        item.setAppliedDiscount(0);
+        item.setPointsApplied(false);
 
         cartRepository.save(item);
     }
+
 
     @Transactional
     public void addToCartWithToken(String username, Long productId, String token) {
@@ -162,11 +192,11 @@ public class CartService {
             item = new CartItem(user, product, 1);
         }
 
-        // ✅ Asigurăm setarea explicită a câmpurilor
+        // 🔥 AICI e cheia: setează explicit indiferent de situație
         item.setUsedPoints(0);
         item.setAppliedDiscount(0);
         item.setPointsApplied(false);
-        item.setMatchingPrice(validatedToken.getApprovedPrice());  // 🟢 SETARE AICI!
+        item.setMatchingPrice(validatedToken.getApprovedPrice());
 
         cartRepository.save(item);
     }
