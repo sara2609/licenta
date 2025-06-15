@@ -159,6 +159,7 @@ export const CartProvider = ({ children }) => {
             applyPointsToCart,
             clearCart
         }}>
+
             {children}
         </CartContext.Provider>
     );

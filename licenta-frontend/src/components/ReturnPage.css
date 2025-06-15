@@ -1,3 +1,4 @@
+/* 📦 FORMULAR RETUR - LIGHT MODE (implicit) */
 .return-container {
     max-width: 600px;
     margin: 40px auto;
@@ -31,6 +32,8 @@
     border-radius: 6px;
     border: 1px solid #ccc;
     font-size: 16px;
+    background-color: #fff;
+    color: #000;
 }
 
 .return-form textarea {
@@ -57,4 +60,33 @@
     color: green;
     font-weight: bold;
     margin-top: 30px;
+}
+
+
+/* 🌙 DARK MODE – fundal mai închis pentru container */
+.dark .return-container,
+.return-container.dark {
+    background-color: #555 !important;
+}
+
+/* 🌙 DARK MODE – text alb și inputuri închise */
+.dark .return-container h2,
+.dark .return-container p {
+    color: #fff;
+}
+
+.dark .return-form input,
+.dark .return-form select,
+.dark .return-form textarea {
+    background-color: #2c2c2c;
+    color: #f5f5f5;
+    border: 1px solid #777;
+}
+
+.dark .return-form button {
+    background-color: #5cb85c;
+}
+
+.dark .return-form button:hover {
+    background-color: #4cae4c;
 }

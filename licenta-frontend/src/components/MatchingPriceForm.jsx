@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import "./MatchingPriceForm.css";
 
 const MatchingPriceForm = () => {
     const { productId } = useParams();
@@ -55,34 +56,40 @@ const MatchingPriceForm = () => {
 
     return (
         <div className="matching-form-container">
-            <h2>Cere Matching Price</h2>
-            <form onSubmit={handleSubmit} className="matching-form">
-                <label>
-                    Preț dorit (RON):
-                    <input
-                        type="number"
-                        step="0.01"
-                        value={requestedPrice}
-                        onChange={(e) => setRequestedPrice(e.target.value)}
-                        required
-                    />
-                </label>
-                <label>
-                    Mesaj către admin:
-                    <textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        rows="4"
-                        placeholder="Ex: Am văzut produsul mai ieftin pe alt site."
-                        required
-                    ></textarea>
-                </label>
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                <button type="submit" disabled={loading}>
-                    {loading ? "Se trimite..." : "Trimite cererea"}
-                </button>
-            </form>
+            <div className="mp-form-card">
+                <h2>Cere Matching Price</h2>
+
+                <div className="mp-inner-box">
+                    <form onSubmit={handleSubmit} className="matching-form">
+                        <label>
+                            Preț dorit (RON):
+                            <input
+                                type="number"
+                                step="0.01"
+                                value={requestedPrice}
+                                onChange={(e) => setRequestedPrice(e.target.value)}
+                                required
+                            />
+                        </label>
+                        <label>
+                            Mesaj către admin:
+                            <textarea
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                rows="4"
+                                placeholder="Ex: Am văzut produsul mai ieftin pe alt site."
+                                required
+                            ></textarea>
+                        </label>
+                        {error && <p className="mp-error">{error}</p>}
+                        <button type="submit" disabled={loading}>
+                            {loading ? "Se trimite..." : "Trimite cererea"}
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+
     );
 };
 

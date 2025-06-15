@@ -1,108 +1,191 @@
-.product-page-container {
-    max-width: 800px;
+/* src/components/ProductPage.css */
+
+/* ========== LAYOUT GENERAL ========= */
+.product-page {
+    max-width: 700px;
     margin: 0 auto;
-    padding: 20px;
-}
-
-.product-page-container h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
+    padding: 30px 20px;
+    font-family: "Segoe UI", sans-serif;
     text-align: center;
 }
 
-.product-page-container p {
-    font-size: 18px;
-    margin-bottom: 10px;
-    text-align: center;
+.product-main-img {
+    width: 320px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    margin: 20px auto;
 }
 
-.review-item {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 15px;
-    color: #000; /* text negru pentru light mode */
+.product-desc {
+    color: #444;
+    margin: 20px 0;
 }
 
-.review-form {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.review-form label {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.review-form select {
-    padding: 8px;
-    margin-bottom: 15px;
-    width: 100px;
-}
-
-.review-form textarea {
-    padding: 10px;
-    resize: vertical;
-    min-height: 100px;
-    margin-bottom: 15px;
-}
-
-.review-form button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 15px;
+.add-cart-btn {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    font-weight: 600;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
 }
 
-.review-form button:hover {
-    background-color: #45a049;
+.add-cart-btn:hover { opacity: .9; }
+
+/* ========== CARD SPECIFICAȚII ========= */
+.specs-card {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 30px auto;
+    max-width: 600px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-.dark .review-item {
-    background-color: #dcdcdc;
-    color: #000;
+.dark .specs-card {
+    background: #2c2c2c;
+    border-color: #555;
 }
 
-.out-of-stock {
-    background-color: #e60000;
-    cursor: not-allowed;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 20px;
-    font-size: 12px;
-    font-weight: bold;
-    display: inline-block;
-    margin-top: 10px;
+.specs-title {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.out-of-stock-text {
-    color: #000;
+.specs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
 }
 
-/* ✅ Detalii suplimentare despre produs (memorie, SIM, OS etc.) */
-.extra-details {
-    margin-top: 20px;
-    padding: 15px;
-    background-color: #f3f3f3;
-    border-left: 5px solid #4CAF50;
-    border-radius: 5px;
+.specs-table th,
+.specs-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
 }
 
-.extra-details h4 {
-    margin-bottom: 10px;
+.specs-table th {
+    width: 40%;
+    font-weight: 600;
+    text-transform: capitalize;
     color: #333;
 }
 
-.extra-details ul {
-    padding-left: 0;
-    list-style: none;
+.dark .specs-table th,
+.dark .specs-table td {
+    border-color: #666;
+    color: #eee;
 }
 
-.extra-details li {
-    margin-bottom: 6px;
-    font-size: 16px;
+/* ========== REVIEW BOX ========= */
+.review-box {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    background: #fafafa;
 }
+
+.dark .review-box {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #eee;
+}
+
+/* ========== FORM REVIEW ========= */
+.form-title {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.review-form {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 60%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.dark .review-form {
+    background: #2c2c2c;
+    border-color: #555;
+}
+
+.review-form select {
+    padding: 6px 8px;
+    font-size: 14px;
+}
+
+.review-form textarea {
+    flex: 1;
+    min-height: 40px;
+    resize: vertical;
+    padding: 8px 10px;
+    font-size: 14px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.review-form button {
+    background: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background .3s;
+}
+
+.review-form button:hover { background: #419944; }
+/* ====== preț + reducere ====== */
+.price-box {
+    margin: 20px 0 26px;
+}
+
+.product-price {
+    color: #000;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 2px 0;
+}
+
+.product-price.reduced {
+    color: #d9534f;          /* roșu */
+}
+
+.old-price {
+    font-size: 16px;
+    color: gray;
+    text-decoration: line-through;
+    margin: 0;
+}
+
+.discount-badge {
+    display: inline-block;
+    background: red;
+    color: #fff;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 6px;
+    margin-bottom: 6px;
+}
+
+/* DARK mode */
+.dark .product-price         { color:#fff; }
+.dark .product-price.reduced { color:#ff7676; }
+.dark .old-price             { color:#999; }
+

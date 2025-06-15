@@ -1,0 +1,175 @@
+/* src/components/MatchingPriceForm.css */
+
+/* ---- container general (centrează card-ul) ---- */
+.matching-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 120px); /* lăsăm loc pentru navbar + footer */
+    padding: 40px 20px;
+    background: #f5f7fa;            /* uşor gri deschis */
+}
+
+.dark .matching-form-container {
+    background: #1c1c1c;
+}
+
+/* ---- cardul propriu-zis ---- */
+.mp-form-card {
+    width: 100%;
+    max-width: 540px;
+    padding: 32px 28px;
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.mp-form-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.dark .mp-form-card {
+    background: #292b31;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- titlu + subtitlu ---- */
+.mp-form-card h2 {
+    margin-top: 0;
+    margin-bottom: 6px;
+    font-size: 26px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.mp-subtext {
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: #666;
+}
+
+.dark .mp-subtext {
+    color: #c8c8c8;
+}
+
+/* ---- formular ---- */
+.matching-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.matching-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.matching-form input,
+.matching-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+    border: 1px solid #cfd6e0;
+    border-radius: 10px;
+    background: #fff;
+    transition: border 0.2s ease;
+    resize: vertical;
+}
+
+.matching-form input:focus,
+.matching-form textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.dark .matching-form input,
+.dark .matching-form textarea {
+    background: #3a3d44;
+    border-color: #555;
+    color: #eee;
+}
+
+.matching-form textarea {
+    min-height: 96px;
+}
+
+/* ---- eroare ---- */
+.mp-error {
+    color: #e63a3a;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: -8px;
+}
+
+/* ---- butonul ---- */
+.matching-form button {
+    align-self: center;
+    width: 60%;
+    max-width: 260px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 30px;
+    background: #007bff;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.matching-form button:hover {
+    background: #0065d1;
+    transform: translateY(-2px);
+}
+
+.matching-form button:disabled {
+    background: #8ab5f3;
+    cursor: default;
+    transform: none;
+}
+
+.dark .matching-form button {
+    background: #0d6efd;
+}
+
+.dark .matching-form button:hover {
+    background: #0b5ad9;
+}
+
+/* ---- confirmare după submit (dacă alegi să o afişezi) ---- */
+.mp-confirm {
+    margin-top: 24px;
+    font-size: 16px;
+    color: #28a745;
+    font-weight: 700;
+}
+
+/* ---- responsive tweaks ---- */
+@media (max-width: 480px) {
+    .mp-form-card {
+        padding: 26px 20px;
+    }
+    .matching-form button {
+        width: 100%;
+    }
+}
+/* Adaugă în MatchingPriceForm.css */
+
+/* card interior pentru formular */
+.mp-inner-box {
+    padding: 24px 20px;
+    background: #f2f2f2;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+    margin-top: 16px;
+}
+
+.dark .mp-inner-box {
+    background: #373737;
+    border-color: #555;
+}

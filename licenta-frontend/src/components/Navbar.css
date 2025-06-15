@@ -194,3 +194,15 @@
 .info-icon-nav:hover {
     background-color: #e67e22;
 }
+/* 🔧 Contrast link-uri în Dark Mode (vizibil pe fundal închis) */
+.dark .side-menu a,
+.dark .side-menu button,
+.dark .icon-link {
+    color: #eee;
+}
+
+.dark .side-menu a:hover,
+.dark .side-menu button:hover,
+.dark .icon-link:hover {
+    color: #1e90ff;
+}

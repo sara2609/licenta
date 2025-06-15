@@ -1,3 +1,4 @@
+/*──────────────────────────── SHOP PAGE ────────────────────────────*/
 .shop-container {
     padding: 20px;
     max-width: 1200px;
@@ -14,248 +15,251 @@
 }
 
 /* Tema DARK */
-.shop-container.dark {
-    background-color: #121212;
+.shop-container.dark         { background-color: #121212; }
+.shop-title.dark             { color: #a259ff; }
+
+/*────────────────────── FILTRE ──────────────────────*/
+.filters{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+}
+.filters input,
+.filters select{
+    padding:8px 12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
 }
 
-.shop-title.dark {
+/*────────────────────── CARD PRODUS ──────────────────────*/
+.product-card{
+    position:relative;
+    padding:15px;
+    margin:10px;
+    background:#fff;
+    border-radius:10px;
+    box-shadow:0 2px 8px rgba(0,0,0,.07);
+    text-align:center;
+}
+.shop-container.dark .product-card{ background:#2c2c2c; color:#fff; }
+
+/* ❤️ Buton wishlist flotant */
+.wishlist-float{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:#fff;
+    border:none;
+    font-size:20px;
+    padding:4px 6px;
+    border-radius:50%;
+    cursor:pointer;
+    box-shadow:0 1px 6px rgba(0,0,0,.12);
+    transition:transform .2s, background .2s;
+}
+.wishlist-float:hover         { transform:scale(1.2); background:#ffe6e6; }
+.shop-container.dark .wishlist-float { background:#2c2c2c; }
+.wishlist-float.fav           { background:#ffb3c7; }
+
+/* Imagine & text */
+.product-image      { width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
+.product-name       { font-size:18px; font-weight:600; margin-bottom:6px; }
+.product-description{ color:#666; font-size:14px; margin-bottom:10px; }
+.shop-container.dark .product-description{ color:#ccc; }
+
+/* Prețuri */
+.product-price         { color:#000; font-weight:bold; margin:5px 0; }
+.old-price             { text-decoration:line-through; color:gray; font-size:14px; margin:0; }
+.product-price.reduced { color:#d9534f; }
+.discount-badge{
+    display:inline-block;
+    background:red; color:#fff; padding:4px 8px;
+    border-radius:5px; font-size:12px; margin-bottom:5px; font-weight:bold;
+}
+
+/* Etichetă stoc */
+.stock-label{
+    color:#c40000; margin-top:4px;
+    font-size:13px; font-weight:600;
+}
+
+/*──────────────────── LAYOUT SECŢIUNI ────────────────────*/
+.recommended-container,
+.recent-container{
+    display:flex; flex-wrap:wrap; justify-content:center;
+    gap:30px; margin:30px 0;
+}
+.recommended-container .product-card,
+.recent-container .product-card{
+    width:220px; transition:transform .2s;
+}
+.recommended-container .product-card:hover,
+.recent-container .product-card:hover{ transform:translateY(-4px); }
+
+.shop-container.dark .recommended-container .product-card,
+.shop-container.dark .recent-container .product-card{
+    background:#2c2c2c; color:#fff;
+}
+
+/*──────────────────── SEPARATOR ────────────────────*/
+.section-separator{
+    margin:40px auto 30px;
+    height:1px;
+    background:linear-gradient(to right,transparent,#ccc,transparent);
+    width:80%; opacity:.6;
+}
+
+/*──────────────────── SĂGEȚI CARUSEL──────────────────*/
+.react-multi-carousel-arrow{
+    width:46px; height:46px;
+    background:#606060; opacity:.85;
+    border:none !important; border-radius:50%;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+    z-index:20; transition:transform .2s;
+}
+.react-multi-carousel-arrow:hover{ transform:scale(1.07); opacity:1; }
+.react-multi-carousel-arrow--left { left:-60px  !important; }
+.react-multi-carousel-arrow--right{ right:-60px !important; }
+
+@media(max-width:600px){
+    .product-card      { padding:10px; }
+    .product-image     { height:150px; }
+    .product-name      { font-size:16px; }
+
+    /* săgeţi mai aproape pe telefon */
+    .react-multi-carousel-arrow--left { left:-35px !important; }
+    .react-multi-carousel-arrow--right{ right:-35px !important; }
+}
+
+/*──────────────────── Diverse rămase ───────────────────*/
+.price-wishlist-row{ display:flex; align-items:center; gap:8px; margin-top:4px; }
+.wishlist-icon-inline{
+    background:none; border:none; font-size:20px; cursor:pointer;
+    opacity:.85; padding:0; transition:transform .2s, opacity .2s;
+}
+.wishlist-icon-inline:hover{ transform:scale(1.2); opacity:1; }
+.section-title-box {
+    background-color: #111;
+    color: #fff;
+    text-align: center;
+    padding: 14px 0;
+    font-size: 22px;
+    font-weight: bold;
+    margin: 40px 0 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.dark .section-title-box {
+    background-color: #1e1e1e;
     color: #a259ff;
 }
-
-.filters {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
+/* ▸ Box negru pentru titlurile secțiunilor */
+.section-title-box{
+    background:#111;
+    color:#fff;
+    text-align:center;
+    padding:14px 0;
+    font-size:22px;
+    font-weight:bold;
+    margin:40px auto 25px;
+    border-radius:8px;
+    width:80%;
+    box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+.dark .section-title-box{
+    background:#1e1e1e;
+    color:#a259ff;
 }
 
-.filters input,
-.filters select {
-    padding: 8px 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
+/* ▸ repoziționez săgețile Carousel puțin în afara cardurilor */
+.react-multiple-carousel__arrow{
+    z-index:3;
+    width:38px;
+    height:38px;
+    min-width:38px;
+    min-height:38px;
+}
+.react-multiple-carousel__arrow--left { left:-45px; }
+.react-multiple-carousel__arrow--right{ right:-45px; }
+/* ■■■■■■■■■■■  ARROWS  ■■■■■■■■■■■ */
+.carousel-wrapper{ position:relative; }
+
+.nav-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:2;
+    width:44px; height:44px;
+    border:none;
+    border-radius:50%;
+    background:#6c6c6c;
+    color:#fff;
+    font-size:18px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    opacity:.9;
+    transition:background .2s;
+}
+.nav-arrow:hover{ background:#4a4a4a; }
+
+.nav-arrow.left { left:-65px; }
+.nav-arrow.right{ right:-65px; }
+
+/* arată săgețile și pe mobil – montează-le mai aproape */
+@media(max-width:600px){
+    .nav-arrow.left { left:-45px; }
+    .nav-arrow.right{ right:-45px; }
 }
 
-/* 🔥 Grilă produse */
-.product-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 20px;
+/* titluri sub-secțiuni (Recomandate / Recent) în bara neagră slim */
+.shop-subtitle{
+    background:#000;
+    color:#fff;
+    text-align:center;
+    padding:10px 0;
+    margin:40px 0 25px;
+    font-size:24px;
+    font-weight:700;
+    border-radius:8px;
+    width:80%;
+    margin-left:auto;
+    margin-right:auto;
 }
-
-/* 🔥 Card produs */
-.product-card {
-    padding: 15px;
-    margin: 10px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    text-align: center;
+/* ─── săgeți carusel ─── */
+.nav-arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:12;
+    width:40px;
+    height:40px;
+    border:none;
+    border-radius:50%;
+    background:#ebebeb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:18px;
+    color:#444;
+    cursor:pointer;
+    transition:background .2s;
 }
-
-/* Dark theme pentru carduri */
-.shop-container.dark .product-card {
-    background: #2c2c2c;
-    color: #fff;
-}
-
-.product-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-
-.product-name {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-
-.product-description {
-    color: #666;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-/* Dark mode text fix */
-.shop-container.dark .product-description {
-    color: #ccc;
-}
-
-.product-price {
-    font-size: 18px;
-    font-weight: bold;
-    color: #e60000;
-    margin-bottom: 12px;
-}
-
-.product-actions {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.cart-button,
-.wishlist-button {
-    padding: 6px 12px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background 0.3s;
-}
-
-.cart-button {
-    background-color: #007BFF;
-    color: white;
-}
-
-.wishlist-button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-}
-
-.cart-button:hover {
-    background-color: #0056b3;
-}
-
-.wishlist-button:hover {
-    background-color: #ffe6e6;
-}
-
-.shop-logo {
-    max-width: 200px;
-    display: block;
-    margin: 20px auto;
-}
-
-/* ✅ Responsive pe mobil */
-@media (max-width: 600px) {
-    .product-card {
-        padding: 10px;
-    }
-
-    .product-image {
-        height: 150px;
-    }
-
-    .product-name {
-        font-size: 16px;
-    }
-}
-
-/* 🛠 Recomandate și Vizualizate Recent */
-.recommended-container,
-.recent-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 30px;
-    margin: 30px 0;
-}
-
-.recommended-container .product-card,
-.recent-container .product-card {
-    width: 220px;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease-in-out;
-}
-
-/* Dark mode pentru carduri jos */
-.shop-container.dark .recommended-container .product-card,
-.shop-container.dark .recent-container .product-card {
-    background-color: #2c2c2c;
-    color: white;
-}
-
-.recommended-container .product-card:hover,
-.recent-container .product-card:hover {
-    transform: translateY(-4px);
-}
-
-.recommended-container .product-image,
-.recent-container .product-image {
-    width: 180px;
-    height: 180px;
-    object-fit: contain;
-    margin-bottom: 10px;
-}
-/* 🟢 Card implicit (light mode) */
-.product-card {
-    background: #fff;
-    padding: 15px;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
-    text-align: center;
-}
-
-/* 🌑 Card în dark mode */
-.shop-container.dark-mode .product-card {
-    background: #d8d8d8;
-    color: #000;
-}
-.dark .hide-in-dark {
-    display: none;
-}
-.discount-badge {
-    display: inline-block;
-    background-color: red;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 12px;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.old-price {
-    text-decoration: line-through;
-    color: gray;
-    font-size: 14px;
-    margin: 0;
-}
-
-.product-price.reduced {
-    color: #d9534f;
-    font-weight: bold;
-}
-/* Preț normal (violet) */
-.product-price {
-    color: #000; /* violet */
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-/* Preț vechi (tăiat) pentru produse reduse */
-.old-price {
-    text-decoration: line-through;
-    color: gray;
-    font-size: 14px;
-    margin: 0;
-}
-
-/* Preț redus (roșu) */
-.product-price.reduced {
-    color: #d9534f; /* roșu */
-    font-weight: bold;
-}
-
-/* Badge „Reducere” */
-.discount-badge {
-    display: inline-block;
-    background-color: red;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 12px;
-    margin-bottom: 5px;
-    font-weight: bold;
+.nav-arrow:hover{ background:#d0d0d0; }
+.nav-arrow.left { left:-50px; }   /* ajustează cât să iasă lângă listă */
+.nav-arrow.right{ right:-50px; }
+/*──────────────────── DARK MODE: Istoric vizibil ────────────────────*/
+.dark .history-card,
+.dark .history-card *,
+.dark .reward-history,
+.dark .reward-history *,
+.dark .order-history,
+.dark .order-history * {
+    color: #eee !important;
+    background-color: #1f1f1f !important;
+    border-color: #444 !important;
 }

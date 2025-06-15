@@ -1,50 +1,59 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
-import { ThemeContext } from "../context/ThemeContext"; // ✅ import tema
+import { ThemeContext } from "../context/ThemeContext";
 import "./AccountPage.css";
 
+/**
+ * AccountPage
+ * ───────────
+ * · Dacă utilizatorul este autentificat   → afișez informații + funcții (logout, schimbă parolă etc.).
+ * · Dacă este vizitator (fără token)      → rămâne pe pagină, vede doar un mesaj.
+ *   Nu mai există redirect sau alertă.
+ */
 const AccountPage = () => {
+    /* ------------------- state & context ------------------- */
     const navigate = useNavigate();
-    const [userInfo, setUserInfo] = useState(null);
+    const { theme } = useContext(ThemeContext);
+
+    const [userInfo, setUserInfo]      = useState(null);
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [showChangeForm, setShowChangeForm] = useState(false);
     const [lowStockProducts, setLowStockProducts] = useState([]);
 
-    const { theme } = useContext(ThemeContext); // ✅ tema curentă
-
+    /* ------------------- effects ------------------- */
     useEffect(() => {
-        const token = localStorage.getItem("token");
+        const token   = localStorage.getItem("token");
         const isGuest = localStorage.getItem("isGuest") === "true";
 
-        if (!token || isGuest) {
-            alert("🔐 Trebuie să fii autentificat.");
-            navigate("/login");
-        } else {
-            try {
-                const decoded = jwtDecode(token);
-                setUserInfo(decoded);
+        // Vizitator ⇒ nu decodăm token, dar rămânem pe pagină
+        if (!token || isGuest) return;
 
-                if (decoded.role === "ADMIN") {
-                    fetch("http://localhost:8080/products/low-stock", {
-                        headers: { Authorization: `Bearer ${token}` },
-                    })
-                        .then(res => res.json())
-                        .then(data => setLowStockProducts(data))
-                        .catch(err => console.error("Eroare stocuri mici:", err));
-                }
-            } catch (error) {
-                console.error("Token invalid");
-                navigate("/login");
+        try {
+            const decoded = jwtDecode(token);
+            setUserInfo(decoded);
+
+            // --- extra pentru admin: produse cu stoc redus ---
+            if (decoded.role === "ADMIN") {
+                fetch("http://localhost:8080/products/low-stock", {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                    .then((res) => res.json())
+                    .then(setLowStockProducts)
+                    .catch((err) => console.error("Eroare stocuri mici:", err));
             }
+        } catch {
+            // token invalid ⇒ șterg și trimit la login
+            localStorage.removeItem("token");
+            navigate("/login", { replace: true });
         }
     }, [navigate]);
 
+    /* ------------------- handlers ------------------- */
     const handleLogout = () => {
-        localStorage.removeItem("token");
-        localStorage.removeItem("isGuest");
-        navigate("/login");
+        localStorage.clear();
+        navigate("/login", { replace: true });
     };
 
     const handlePasswordSubmit = async (e) => {
@@ -67,30 +76,38 @@ const AccountPage = () => {
 
             if (response.ok) {
                 alert("✅ Parola schimbată cu succes!");
-                localStorage.removeItem("token");
-                localStorage.removeItem("isGuest");
-                navigate("/login");
+                localStorage.clear();
+                navigate("/login", { replace: true });
             } else {
                 const text = await response.text();
                 alert("❌ Eroare: " + text);
             }
-        } catch (err) {
+        } catch {
             alert("❌ Eroare rețea");
         }
     };
 
+    /* ------------------- render ------------------- */
     return (
         <div className={`account-container center-content ${theme}`}>
             <h2 className={`account-title ${theme}`}>👤 Pagina contului</h2>
 
             {userInfo ? (
+                /* ========= UTILIZATOR AUTENTIFICAT ========= */
                 <div className="account-info">
-                    <p><strong>Username sau email:</strong> {userInfo.sub}</p>
+                    <p>
+                        <strong>Username sau email:</strong> {userInfo.sub}
+                    </p>
 
-                    <button className="logout-button" onClick={handleLogout}>🚪 Log Out</button>
+                    <button className="logout-button" onClick={handleLogout}>
+                        🚪 Log Out
+                    </button>
 
                     {!showChangeForm ? (
-                        <button className="change-password-button" onClick={() => setShowChangeForm(true)}>
+                        <button
+                            className="change-password-button"
+                            onClick={() => setShowChangeForm(true)}
+                        >
                             🔑 Schimbă parola
                         </button>
                     ) : (
@@ -103,7 +120,7 @@ const AccountPage = () => {
                             />
                             <input
                                 type="password"
-                                placeholder="Parola nouă"
+                                placeholder="Parola nouă (min. 6)"
                                 value={newPassword}
                                 onChange={(e) => setNewPassword(e.target.value)}
                             />
@@ -111,13 +128,13 @@ const AccountPage = () => {
                         </form>
                     )}
 
-                    {userInfo?.role === "ADMIN" && lowStockProducts.length > 0 && (
+                    {userInfo.role === "ADMIN" && lowStockProducts.length > 0 && (
                         <div className="low-stock-box">
                             <h4>⚠️ Produse cu stoc redus</h4>
                             <ul>
-                                {lowStockProducts.map(product => (
-                                    <li key={product.id}>
-                                        {product.name} — <strong>{product.stock} buc.</strong>
+                                {lowStockProducts.map((p) => (
+                                    <li key={p.id}>
+                                        {p.name} — <strong>{p.stock} buc.</strong>
                                     </li>
                                 ))}
                             </ul>
@@ -125,7 +142,12 @@ const AccountPage = () => {
                     )}
                 </div>
             ) : (
-                <p>Se încarcă informațiile...</p>
+                /* ========= VIZITATOR NEAUTENTIFICAT ========= */
+                <p className="guest-message">
+                    Nu ești autentificat. Poți continua să navighezi, dar pentru a vedea
+                    detaliile contului trebuie să te
+                    <button className="inline-link" onClick={() => navigate("/login")}> conectezi</button>.
+                </p>
             )}
         </div>
     );
