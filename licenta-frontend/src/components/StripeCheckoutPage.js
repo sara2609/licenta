@@ -1,8 +1,8 @@
-// ✅ StripeCheckoutPage.js - FINAL
 import React, { useEffect, useState, useContext } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CartContext } from "../context/CartContext";
+import "./StripeCheckoutPage.css";
 
 const stripePromise = loadStripe("pk_test_51R4OgA14Om18N7m64OZduIGRm6mxusmATr9NEm3ABCKLiKrLfAkMudT17CoSCivbpyxdQAaHPdjizuwR77Z6l6VK00dGr6Hgng");
 
@@ -12,16 +12,20 @@ const CheckoutForm = () => {
     const { clearCart } = useContext(CartContext);
 
     const [clientSecret, setClientSecret] = useState("");
-    const [months, setMonths] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
+    /* info salvate din localStorage */
     const orderId = localStorage.getItem("orderId");
-    const email = localStorage.getItem("email");
-    const name = localStorage.getItem("name");
-    const zip = localStorage.getItem("zip");
-    const amount = Number(localStorage.getItem("total"));
+    const email   = localStorage.getItem("email");
+    const name    = localStorage.getItem("name");
+    const zip     = localStorage.getItem("zip");
+    const amount  = Number(localStorage.getItem("total"));
+    const months  = localStorage.getItem("months") || "0";  // "0" = integrală
 
+    const rateInfo = months !== "0" ? (amount / +months).toFixed(2) : null;
+
+    /* obțin clientSecret de la backend */
     useEffect(() => {
         if (!amount || isNaN(amount) || amount <= 0) {
             alert("❌ Suma pentru plată nu este validă.");
@@ -31,28 +35,18 @@ const CheckoutForm = () => {
         fetch("http://localhost:8080/payment/create", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ amount, months: months ? parseInt(months) : null })
+            body: JSON.stringify({ amount, months: months !== "0" ? +months : null })
         })
             .then(res => res.json())
-            .then(data => {
-                if (!data.clientSecret) {
-                    alert("❌ Tokenul de plată Stripe nu a fost generat.");
-                    return;
-                }
-                setClientSecret(data.clientSecret);
-            })
-            .catch(err => {
-                console.error("❌ fetch /payment/create:", err);
-                alert("❌ Eroare la obținerea tokenului de plată.");
-            });
+            .then(data => setClientSecret(data.clientSecret))
+            .catch(() => alert("❌ Eroare la obținerea tokenului Stripe."));
     }, [amount, months]);
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleSubmit = async e => {
+        e.preventDefault();
         if (!stripe || !elements || !clientSecret) return;
 
-        setLoading(true);
-        setError("");
+        setLoading(true); setError("");
 
         const cardElement = elements.getElement(CardElement);
         const result = await stripe.confirmCardPayment(clientSecret, {
@@ -70,29 +64,25 @@ const CheckoutForm = () => {
 
         if (result.error) {
             setError(result.error.message);
-            alert("❌ Plata a eșuat: " + result.error.message);
         } else if (result.paymentIntent.status === "succeeded") {
             try {
-                if (months) {
-                    localStorage.setItem("months", months);
-                    localStorage.setItem("monthly", (amount / months).toFixed(2));
-
+                /* salvez rate doar dacă există */
+                if (months !== "0") {
                     await fetch("http://localhost:8080/installments/create", {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("token")}` // ✅ Adăugat
+                            Authorization: `Bearer ${localStorage.getItem("token")}`
                         },
                         body: JSON.stringify({
                             orderId,
-                            months: parseInt(months),
+                            months: +months,
                             total: amount
                         })
                     });
                 }
 
-                clearCart();
-
+                /* curăț coșul */
                 await fetch("http://localhost:8080/cart/clear-after-payment", {
                     method: "POST",
                     headers: {
@@ -100,37 +90,32 @@ const CheckoutForm = () => {
                         Authorization: `Bearer ${localStorage.getItem("token")}`
                     }
                 });
+                clearCart();
 
                 alert("✅ Plata finalizată cu succes!");
                 window.location.href = "/my-orders";
             } catch (err) {
-                console.error("❌ Eroare backend:", err);
-                alert("Plata a mers, dar ceva n-a mers la backend.");
+                alert("Plata OK, dar actualizarea backend a eșuat.");
             }
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="stripe-form">
+        <form onSubmit={handleSubmit} className="stripe-checkout-form-custom">
             <h2>💳 Finalizează plata comenzii</h2>
-            <input type="text" value={name} readOnly />
-            <input type="email" value={email} readOnly />
-            <input type="text" value={zip} readOnly />
 
-            <label>Alege plata în rate:</label>
-            <select value={months} onChange={(e) => setMonths(e.target.value)}>
-                <option value="">Plată integrală</option>
-                <option value="6">6 luni</option>
-                <option value="12">12 luni</option>
-                <option value="18">18 luni</option>
-                <option value="24">24 luni</option>
-                <option value="36">36 luni</option>
-            </select>
+            <input value={name}  readOnly />
+            <input value={email} readOnly />
+            <input value={zip}   readOnly />
 
-            {months && <p>Rată estimată: {(amount / months).toFixed(2)} RON/lună</p>}
+            {months !== "0"
+                ? <p className="rate-line">Plată în {months} luni • Rată: {rateInfo} RON/lună</p>
+                : <p className="rate-line">Plată integrală</p>}
 
-            <CardElement />
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            <CardElement className="stripe-input" />
+
+            {error && <p className="error">{error}</p>}
+
             <button type="submit" disabled={!stripe || loading}>
                 {loading ? "Se procesează..." : "Plătește"}
             </button>
@@ -139,9 +124,11 @@ const CheckoutForm = () => {
 };
 
 const StripeCheckoutPage = () => (
-    <Elements stripe={stripePromise}>
-        <CheckoutForm />
-    </Elements>
+    <div className="stripe-checkout-container">
+        <Elements stripe={stripePromise}>
+            <CheckoutForm />
+        </Elements>
+    </div>
 );
 
 export default StripeCheckoutPage;

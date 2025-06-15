@@ -1,59 +1,60 @@
-.orders-container {
-    padding: 40px;
-    max-width: 700px;
-    margin: auto;
-    color: #222;
+/* ───────── CONTAINER & TITLU ───────── */
+.orders-container{
+    max-width:840px;
+    margin:35px auto;
+    padding:0 16px;
 }
 
-.order-card {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    padding: 20px;
-    background: #f9f9f9;
+.orders-title{
+    text-align:center;
+    font-size:28px;
+    margin-bottom:28px;
 }
 
-.order-card h4 {
-    margin-bottom: 10px;
+/* ───────── LISTĂ & CARD ───────── */
+.orders-list{
+    list-style:none;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:18px;
 }
 
-.order-card ul {
-    padding-left: 20px;
+.order-card{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px 18px;
+    padding:18px 22px;
+    border-radius:10px;
+    background:#f7f7f7;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+    font-size:15px;
 }
 
-.order-card li {
-    margin-bottom: 5px;
-}
-.orders-page {
-    padding: 20px;
+.order-card span{ white-space:nowrap; }
+
+/* etichetă rată lunară */
+.rate-tag{
+    grid-column:1/-1;
+    background:#ffd34d;
+    color:#222;
+    padding:4px 10px;
+    border-radius:6px;
+    font-weight:600;
+    text-align:left;
+    font-size:14px;
 }
 
-.orders-page h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #222; /* implicit pe alb */
+/* ───────── DARK MODE ───────── */
+.dark .orders-title{ color:#a259ff; }
+
+.dark .order-card{
+    background:#1f1f1f;
+    color:#eee;
+    box-shadow:0 2px 6px rgba(0,0,0,.3);
 }
 
-/* dark mode: titlu alb */
-.dark .orders-page h2 {
-    color: #fff;
-}
-
-/* fiecare card de comandă */
-.order-card {
-    background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    color: #000000;
-}
-
-/* dark mode: card gri și text alb */
-.dark .order-card {
-    background-color: #d8d8d8;
-    color: #000000;
-}
-.orders-container.dark h2 {
-    color: white;
+.dark .rate-tag{
+    background:#8458ff;
+    color:#fff;
 }

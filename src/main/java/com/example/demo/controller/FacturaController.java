@@ -12,50 +12,55 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/facturi")
+@CrossOrigin(origins = "http://localhost:3000")     // ✅ permite frontend-ului
 public class FacturaController {
 
     private final FacturaRepository facturaRepository;
-    private final FacturaService facturaService;
+    private final FacturaService   facturaService;
 
-    public FacturaController(FacturaRepository facturaRepository, FacturaService facturaService) {
+    public FacturaController(FacturaRepository facturaRepository,
+                             FacturaService facturaService) {
         this.facturaRepository = facturaRepository;
-        this.facturaService = facturaService;
+        this.facturaService    = facturaService;
     }
 
+    /* ---------- Admin sau debugging ---------- */
     @GetMapping
     public List<Factura> getAllFacturi() {
         return facturaRepository.findAll();
     }
 
+    /* ---------- Lista facturi pentru user ---------- */
     @GetMapping("/email/{email}")
     public ResponseEntity<List<FacturaDTO>> getFacturiByEmail(@PathVariable String email) {
-        List<Factura> facturi = facturaRepository.findByEmail(email);
 
-        List<FacturaDTO> rezultat = facturi.stream().map(factura -> {
-            String rateSummary = facturaService.getRateSummaryForOrder(factura.getOrderId());
-
-            return FacturaDTO.builder()
-                    .id(factura.getId())
-                    .orderId(factura.getOrderId())
-                    .clientName(factura.getClientName())
-                    .email(factura.getEmail())
-                    .total(factura.getTotal())
-                    .filePath(factura.getFilePath())
-                    .dataEmitere(factura.getDataEmitere())
-                    .rateSummary(rateSummary)
-                    .build();
-        }).toList();
+        List<FacturaDTO> rezultat = facturaRepository.findByEmail(email).stream()
+                .map(f -> {
+                    String rate = facturaService.getRateSummaryForOrder(f.getOrderId());
+                    return FacturaDTO.builder()
+                            .id(f.getId())
+                            .orderId(f.getOrderId())
+                            .clientName(f.getClientName())
+                            .email(f.getEmail())
+                            .total(f.getTotal())
+                            .filePath(f.getFilePath())
+                            .dataEmitere(f.getDataEmitere())
+                            .rateSummary(rate)
+                            .build();
+                })
+                .toList();
 
         return ResponseEntity.ok(rezultat);
     }
 
+    /* ---------- Generare + trimitere imediată ---------- */
     @PostMapping("/generate")
     public ResponseEntity<String> genereazaFactura(@RequestBody Comanda comanda) {
         try {
             facturaService.trimiteFactura(comanda);
-            return ResponseEntity.ok("✅ Factura a fost generată și trimisă cu succes!");
+            return ResponseEntity.ok("✅ Factura a fost generată și trimisă!");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("❌ Eroare: " + e.getMessage());
+            return ResponseEntity.badRequest().body("❌ " + e.getMessage());
         }
     }
 }

@@ -1,56 +1,50 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Carousel                   from "react-multi-carousel";
+import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
 import "./ShopPage.css";
 import { WishlistContext } from "../context/WishlistContext";
-import { ThemeContext }    from "../context/ThemeContext";
+import { ThemeContext } from "../context/ThemeContext";
 
-/* ======= COMPONENTĂ PRINCIPALĂ ======= */
 const ShopPage = () => {
-    /* ---------------- state ---------------- */
-    const [products,            setProducts]            = useState([]);
+    const [products, setProducts] = useState([]);
     const [recommendedProducts, setRecommendedProducts] = useState([]);
-    const [recentProducts,      setRecentProducts]      = useState([]);
-    const [search,              setSearch]              = useState("");
-    const [sortOrder,           setSortOrder]           = useState("");
-    const [category,            setCategory]            = useState("");
+    const [recentProducts, setRecentProducts] = useState([]);
+    const [search, setSearch] = useState("");
+    const [sortOrder, setSortOrder] = useState("");
+    const [category, setCategory] = useState("");
 
-    /* -------------- context -------------- */
     const { addToWishlist, wishlistItems } = useContext(WishlistContext);
-    const { theme }                        = useContext(ThemeContext);
+    const { theme } = useContext(ThemeContext);
 
-    /* -------------- router --------------- */
     const location = useLocation();
     const navigate = useNavigate();
 
-    /* ------------ query-param ------------ */
     useEffect(() => {
         const params = new URLSearchParams(location.search);
         setCategory(params.get("category") || "");
     }, [location.search]);
 
-    /* ------------- fetch produse ---------- */
     useEffect(() => {
         const fetchData = async () => {
             try {
                 let url = "http://localhost:8080/products";
-                if      (sortOrder === "review") url = "http://localhost:8080/products/sort/review";
-                else if (sortOrder === "sold")   url = "http://localhost:8080/products/sort/sold";
-                else if (category)               url += `?categorie=${category}`;
+                if (sortOrder === "review") url = "http://localhost:8080/products/sort/review";
+                else if (sortOrder === "sold") url = "http://localhost:8080/products/sort/sold";
+                else if (category) url += `?categorie=${category}`;
 
-                const res  = await fetch(url);
+                const res = await fetch(url);
                 const data = await res.json();
 
-                /* Matching-Price */
-                const token  = localStorage.getItem("token");
+                const token = localStorage.getItem("token");
                 const userId = localStorage.getItem("id");
-                let  tokens  = [];
+                let tokens = [];
+
                 if (token && userId) {
                     const tRes = await fetch(
                         `http://localhost:8080/api/matching-price/tokens/user/${userId}`,
-                        { headers:{ Authorization:`Bearer ${token}` } }
+                        { headers: { Authorization: `Bearer ${token}` } }
                     );
                     if (tRes.ok) tokens = await tRes.json();
                 }
@@ -58,33 +52,34 @@ const ShopPage = () => {
                 const adj = Array.isArray(data)
                     ? data.map(p => {
                         const m = tokens.find(t => t.productId === p.id);
-                        return m ? { ...p, initialPrice:p.price, price:m.approvedPrice } : p;
+                        return m ? { ...p, initialPrice: p.price, price: m.approvedPrice } : p;
                     })
                     : [];
 
                 setProducts(adj);
-                setRecommendedProducts([...adj].sort((a,b)=>b.sold-a.sold).slice(0,3));
-
+                setRecommendedProducts([...adj].sort((a, b) => b.sold - a.sold).slice(0, 3));
                 const ids = JSON.parse(localStorage.getItem("recentProducts")) || [];
                 setRecentProducts(adj.filter(p => ids.includes(p.id)));
-            } catch (e) { console.error("❌ Fetch produse:", e); }
+            } catch (e) {
+                console.error("❌ Fetch produse:", e);
+            }
         };
         fetchData();
     }, [category, sortOrder]);
 
-    /* ------------- helpers --------------- */
     const handleProductClick = id => navigate(`/product/${id}`);
 
     const filtered = products
         .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
-        .sort((a,b)=>
-            sortOrder==="asc"  ? a.price-b.price :
-                sortOrder==="desc" ? b.price-a.price : 0 );
+        .sort((a, b) =>
+            sortOrder === "asc" ? a.price - b.price :
+                sortOrder === "desc" ? b.price - a.price : 0
+        );
 
     const responsive = {
-        desktop:{ breakpoint:{ max:3000, min:1024 }, items:3 },
-        tablet :{ breakpoint:{ max:1024, min:768  }, items:2 },
-        mobile :{ breakpoint:{ max:768 , min:0    }, items:1 },
+        desktop: { breakpoint: { max: 3000, min: 1024 }, items: 3 },
+        tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
+        mobile: { breakpoint: { max: 768, min: 0 }, items: 1 },
     };
 
     const getImg = img =>
@@ -92,24 +87,23 @@ const ShopPage = () => {
             : img.startsWith("http") ? img
                 : `http://localhost:8080/uploads/${img}`;
 
-    /* ----------- SĂGEȚI SIMPLE ----------- */
-    const ArrowLeft  = ({ onClick }) => (
-        <button className="nav-arrow left"  onClick={onClick}>‹</button>
-    );
-    const ArrowRight = ({ onClick }) => (
-        <button className="nav-arrow right" onClick={onClick}>›</button>
+    const ArrowLeft = ({ onClick }) => (
+        <button className="shop-nav-arrow left" onClick={onClick} aria-label="Prev">‹</button>
     );
 
-    /* ---------- CARD PRODUS ---------- */
+    const ArrowRight = ({ onClick }) => (
+        <button className="shop-nav-arrow right" onClick={onClick} aria-label="Next">›</button>
+    );
+
     const ProductCard = ({ product }) => {
         const fav = wishlistItems.some(w => w.id === product.id);
 
         return (
-            <div className="product-card" onClick={()=>handleProductClick(product.id)}>
+            <div className="product-card" onClick={() => handleProductClick(product.id)}>
                 <button
                     className={`wishlist-float ${fav ? "fav" : ""}`}
                     title={fav ? "În favorite" : "Adaugă în wishlist"}
-                    onClick={async e=>{
+                    onClick={async e => {
                         e.stopPropagation();
                         const msg = await addToWishlist(product);
                         if (msg) alert(msg);
@@ -120,7 +114,7 @@ const ShopPage = () => {
 
                 <img src={getImg(product.imageUrl)} alt={product.name} className="product-image" />
                 <h3 className="product-name">{product.name}</h3>
-                <p  className="product-description">{product.description}</p>
+                <p className="product-description">{product.description}</p>
 
                 {product.initialPrice && product.initialPrice > product.price && (
                     <>
@@ -133,35 +127,33 @@ const ShopPage = () => {
                     {product.price.toFixed(2)} RON
                 </p>
 
-                {(!product.stock || product.stock<=0) && <p className="stock-label">Stoc epuizat</p>}
+                {(!product.stock || product.stock <= 0) && <p className="stock-label">Stoc epuizat</p>}
             </div>
         );
     };
 
-    /* -------------- RENDER -------------- */
     return (
-        <div className={`shop-container ${theme==="dark" ? "dark" : ""}`}>
-            <h2 className={`shop-title ${theme==="dark" ? "dark" : ""}`}>
+        <div className={`shop-container ${theme === "dark" ? "dark" : ""}`}>
+            <h2 className={`shop-title ${theme === "dark" ? "dark" : ""}`}>
                 🔌 Electronice disponibile
             </h2>
 
-            {/* -------- Filtre -------- */}
             <div className="filters">
                 <input
                     type="text"
                     placeholder="🔍 Caută produs..."
                     value={search}
-                    onChange={e=>setSearch(e.target.value)}
+                    onChange={e => setSearch(e.target.value)}
                     className="search-filter"
                 />
-                <select value={sortOrder} onChange={e=>setSortOrder(e.target.value)} className="sort-filter">
+                <select value={sortOrder} onChange={e => setSortOrder(e.target.value)} className="sort-filter">
                     <option value="">Sortează</option>
                     <option value="asc">Preț crescător</option>
                     <option value="desc">Preț descrescător</option>
                     <option value="review">Scor recenzie</option>
                     <option value="sold">Cele mai vândute</option>
                 </select>
-                <select value={category} onChange={e=>setCategory(e.target.value)} className="category-filter">
+                <select value={category} onChange={e => setCategory(e.target.value)} className="category-filter">
                     <option value="">Toate categoriile</option>
                     <option value="TELEFON">Telefoane</option>
                     <option value="TABLETA">Tablete</option>
@@ -169,7 +161,6 @@ const ShopPage = () => {
                 </select>
             </div>
 
-            {/* -------- Produse -------- */}
             {filtered.length === 0 ? (
                 <p className="loading-text">Nu există produse...</p>
             ) : (
@@ -181,7 +172,7 @@ const ShopPage = () => {
                             autoPlay
                             autoPlaySpeed={3000}
                             keyBoardControl
-                            customLeftArrow ={<ArrowLeft  />}
+                            customLeftArrow={<ArrowLeft />}
                             customRightArrow={<ArrowRight />}
                         >
                             {filtered.map(p => <ProductCard key={p.id} product={p} />)}
@@ -191,7 +182,6 @@ const ShopPage = () => {
                 </>
             )}
 
-            {/* -------- Recomandate -------- */}
             {recommendedProducts.length > 0 && (
                 <>
                     <h3 className="shop-subtitle">🔥 Recomandate</h3>
@@ -202,7 +192,6 @@ const ShopPage = () => {
                 </>
             )}
 
-            {/* -------- Recent -------- */}
             {recentProducts.length > 0 && (
                 <>
                     <h3 className="shop-subtitle">🕓 Vizualizate Recent</h3>

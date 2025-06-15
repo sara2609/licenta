@@ -1,47 +1,53 @@
 .stripe-checkout-container {
-    padding: 40px;
-    max-width: 500px;
-    margin: 0 auto;
+    max-width: 480px;
+    margin: 40px auto;
+    padding: 0 15px;
     text-align: center;
 }
 
 .stripe-checkout-form-custom {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
+    background: #f2f4f8;
+    padding: 24px 22px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.row label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    text-align: left;
-    display: block;
-}
-
-.stripe-input, input {
+.stripe-checkout-form-custom input {
     padding: 10px;
+    font-size: 15px;
     border: 1px solid #ccc;
     border-radius: 6px;
-    font-size: 16px;
-    width: 100%;
+    background: #fff;
+}
+
+.stripe-input {
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.rate-line {
+    font-weight: 600;
+    margin-top: 4px;
 }
 
 button {
-    background-color: #1a73e8;
-    color: white;
-    font-weight: bold;
+    background: #1a73e8;
+    color: #fff;
+    font-weight: 600;
     padding: 12px;
     border: none;
     border-radius: 6px;
     cursor: pointer;
     font-size: 16px;
+    transition: background 0.25s;
 }
 
-button:disabled {
-    background-color: gray;
-    cursor: not-allowed;
-}
+button:hover { background: #0f5dd2; }
+button:disabled { background: gray; cursor: not-allowed; }
 
-.error {
-    color: red;
-}
+.error { color: #d70000; }

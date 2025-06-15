@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        /* ---------- PUBLIC ---------- */
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
@@ -53,11 +54,18 @@ public class SecurityConfig {
                                 "/auth/reset-password",
                                 "/uploads/**",
                                 "/api/invoice/view/**",
-                                "/api/facturi/generate",
+                                "/api/facturi/generate",      // PDF generare din checkout
+                                "/api/send-invoice",          // controller e-mail direct
                                 "/api/returns",
                                 "/payment/**"
                         ).permitAll()
-                        .requestMatchers("/installments/create").authenticated() // ✅ ADĂUGAT
+
+                        /* ---------- USER / ADMIN ---------- */
+                        .requestMatchers(HttpMethod.GET, "/api/facturi/email/**")
+                        .hasAnyRole("USER","ADMIN")          // lista de facturi (comenzile mele)
+
+                        .requestMatchers("/installments/create").authenticated()
+
                         .requestMatchers(HttpMethod.GET,
                                 "/products",
                                 "/products/{id}",
@@ -65,29 +73,38 @@ public class SecurityConfig {
                                 "/products/sort/review",
                                 "/products?categorie=**"
                         ).permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/returns/all").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/returns/*/status").hasRole("ADMIN")
-                        .requestMatchers("/products/add", "/products/{id}", "/products/{id}/stock", "/products/delete/**").hasRole("ADMIN")
+
+                        .requestMatchers("/products/add", "/products/{id}", "/products/{id}/stock",
+                                "/products/delete/**").hasRole("ADMIN")
+
                         .requestMatchers("/reviews/product/**").permitAll()
-                        .requestMatchers("/reviews/user", "/reviews/add").authenticated()
-                        .requestMatchers("/api/rewards/status", "/api/rewards/claim", "/api/rewards/points").hasRole("USER")
+                        .requestMatchers("/reviews/user","/reviews/add").authenticated()
+
+                        .requestMatchers("/api/rewards/status","/api/rewards/claim","/api/rewards/points").hasRole("USER")
                         .requestMatchers("/api/rewards/history").hasRole("USER")
                         .requestMatchers("/admin/reward-history").hasRole("ADMIN")
+
                         .requestMatchers("/fidelity/**").authenticated()
-                        .requestMatchers("/messages/all", "/messages/reply/**", "/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/wishlist/**", "/cart/**").authenticated()
+                        .requestMatchers("/messages/all","/messages/reply/**","/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/wishlist/**","/cart/**").authenticated()
                         .requestMatchers("/messages/send").authenticated()
-                        .requestMatchers("/api/matching-price/create").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers("/api/matching-price/user/**").hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/api/matching-price/create").hasAnyRole("USER","ADMIN")
+                        .requestMatchers("/api/matching-price/user/**").hasAnyRole("USER","ADMIN")
                         .requestMatchers(
                                 "/api/matching-price/approve/**",
                                 "/api/matching-price/reject/**",
                                 "/api/matching-price/pending"
                         ).hasRole("ADMIN")
                         .requestMatchers("/api/matching-price/generate-token/**").hasRole("ADMIN")
+
+                        /* ---------- FALLBACK ---------- */
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -95,14 +112,14 @@ public class SecurityConfig {
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true);
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("http://localhost:3000"));
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/**", cfg);
         return source;
     }
 }
