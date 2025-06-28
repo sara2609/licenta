@@ -20,7 +20,7 @@ const WishlistPage = () => {
             const text = await res.text();
             alert(res.ok ? "✅ " + text : "❌ " + text);
 
-            if (res.ok) window.location.reload(); // reîncarcă lista
+            if (res.ok) window.location.reload();
         } catch (err) {
             console.error("❌ Eroare la mutare în coș:", err);
         }

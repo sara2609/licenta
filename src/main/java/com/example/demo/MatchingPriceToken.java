@@ -22,7 +22,7 @@ public class MatchingPriceToken {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String token; // UUID.randomUUID().toString()
+    private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -55,21 +55,21 @@ public class MatchingPriceToken {
     public int hashCode() {
         return Objects.hash(id);
     }
-    // Expose productId in JSON
+
     @Transient
     @JsonProperty("productId")
     public Long getProductId() {
         return product != null ? product.getId() : null;
     }
 
-    // Expose token explicitly
+
     @Transient
     @JsonProperty("token")
     public String getTokenValue() {
         return token;
     }
 
-    // Expose approvedPrice explicitly (optional, dar util pt. claritate)
+
     @Transient
     @JsonProperty("approvedPrice")
     public Double getApprovedPriceValue() {

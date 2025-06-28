@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./UpdateStockPage.css";
 
 const UpdateStockPage = () => {
     const [products, setProducts] = useState([]);
@@ -9,7 +10,7 @@ const UpdateStockPage = () => {
             const token = localStorage.getItem("token");
 
             const res = await fetch("http://localhost:8080/products", {
-                headers: { Authorization: `Bearer ${token}` }
+                headers: { Authorization: `Bearer ${token}` },
             });
 
             if (res.ok) {
@@ -22,9 +23,9 @@ const UpdateStockPage = () => {
     }, []);
 
     const handleStockChange = (id, value) => {
-        setStockUpdates(prev => ({
+        setStockUpdates((prev) => ({
             ...prev,
-            [id]: value
+            [id]: value,
         }));
     };
 
@@ -34,10 +35,13 @@ const UpdateStockPage = () => {
 
         if (newStock === undefined || newStock === "") return;
 
-        const res = await fetch(`http://localhost:8080/products/${id}/stock?stock=${newStock}`, {
-            method: "PUT",
-            headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await fetch(
+            `http://localhost:8080/products/${id}/stock?stock=${newStock}`,
+            {
+                method: "PUT",
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
 
         if (res.ok) {
             alert("✅ Stoc actualizat!");
@@ -48,23 +52,37 @@ const UpdateStockPage = () => {
     };
 
     return (
-        <div style={{
-            padding: "30px",
-            maxWidth: "800px",
-            margin: "0 auto",
-            backgroundColor: "#fff",
-            borderRadius: "8px"
-        }}>
-            <h2 style={{ textAlign: "center", marginBottom: "30px" }}>📦 Actualizează stocul produselor</h2>
+        <div
+            className="stock-container"
+            style={{
+                padding: "30px",
+                maxWidth: "800px",
+                margin: "0 auto",
+                borderRadius: "8px",
+            }}
+        >
+            <h2
+                style={{
+                    textAlign: "center",
+                    marginBottom: "30px",
+                }}
+            >
+                📦 Actualizează stocul produselor
+            </h2>
 
             {products.map((p) => (
-                <div key={p.id} style={{
-                    marginBottom: "30px",
-                    padding: "15px",
-                    borderBottom: "1px solid #ccc"
-                }}>
+                <div
+                    key={p.id}
+                    style={{
+                        marginBottom: "30px",
+                        padding: "15px",
+                        borderBottom: "1px solid #ccc",
+                    }}
+                >
                     <h4 style={{ marginBottom: "5px" }}>{p.name}</h4>
-                    <p style={{ margin: "5px 0" }}>Stoc curent: <strong>{p.stock}</strong></p>
+                    <p style={{ margin: "5px 0" }}>
+                        Stoc curent: <strong>{p.stock}</strong>
+                    </p>
                     <input
                         type="number"
                         placeholder="Stoc nou"

@@ -101,7 +101,7 @@ const CartPage = () => {
 
                     <p><strong>Total după reduceri:</strong> {getTotal().toFixed(2)} RON</p>
 
-                    {/* 👉 Aici e containerul care separă frumos cele două butoane */}
+                    { }
                     <div className="cart-buttons">
                         <button onClick={handleApplyPoints} className="place-order-button">🎯 Aplică punctele</button>
                         <button onClick={() => navigate("/checkout")} className="place-order-button">🚀 Plasează comanda</button>

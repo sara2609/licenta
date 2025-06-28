@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/facturi")
-@CrossOrigin(origins = "http://localhost:3000")     // ✅ permite frontend-ului
+@CrossOrigin(origins = "http://localhost:3000")
 public class FacturaController {
 
     private final FacturaRepository facturaRepository;
@@ -24,13 +24,13 @@ public class FacturaController {
         this.facturaService    = facturaService;
     }
 
-    /* ---------- Admin sau debugging ---------- */
+
     @GetMapping
     public List<Factura> getAllFacturi() {
         return facturaRepository.findAll();
     }
 
-    /* ---------- Lista facturi pentru user ---------- */
+
     @GetMapping("/email/{email}")
     public ResponseEntity<List<FacturaDTO>> getFacturiByEmail(@PathVariable String email) {
 
@@ -53,7 +53,7 @@ public class FacturaController {
         return ResponseEntity.ok(rezultat);
     }
 
-    /* ---------- Generare + trimitere imediată ---------- */
+
     @PostMapping("/generate")
     public ResponseEntity<String> genereazaFactura(@RequestBody Comanda comanda) {
         try {

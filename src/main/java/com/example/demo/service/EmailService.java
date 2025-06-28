@@ -22,7 +22,7 @@ public class EmailService {
         helper.setSubject(subject);
         helper.setFrom("stefan.emil.cocolos@gmail.com");
         helper.setReplyTo("stefan.emil.cocolos@gmail.com");
-        helper.setText(contentHtml, true); // true = HTML
+        helper.setText(contentHtml, true);
 
         mailSender.send(message);
     }
@@ -31,11 +31,11 @@ public class EmailService {
             throws MessagingException {
 
         MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message, true); // true = multipart
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
         helper.setTo(to);
         helper.setSubject(subject);
-        helper.setText(body, true); // true = HTML
+        helper.setText(body, true);
 
         helper.setFrom("stefan.emil.cocolos@gmail.com");
         helper.setReplyTo("stefan.emil.cocolos@gmail.com");
@@ -45,7 +45,7 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    // 🔥 Nouă metodă pentru trimitere de răspuns simplu text
+
     public void trimiteRaspunsLaUtilizator(String to, String mesajDeTrimis) throws MessagingException {
         trimiteEmailSimplu(to, "Răspuns la mesajul tău", mesajDeTrimis);
     }

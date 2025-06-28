@@ -1,4 +1,4 @@
-/* 🔧 BARA DE SUS - NAVBAR */
+
 .navbar {
     background-color: #111;
     padding: 20px 0;
@@ -9,7 +9,7 @@
     z-index: 1000;
 }
 
-/* 🔧 BUTON ☰ MENIU STÂNGA SUS */
+
 .menu-toggle {
     position: absolute;
     left: 25px;
@@ -22,7 +22,7 @@
     z-index: 1500;
 }
 
-/* 🔧 LOGO CENTRAT */
+
 .navbar-center-logo {
     display: flex;
     justify-content: center;
@@ -34,7 +34,7 @@
     width: auto;
 }
 
-/* 🔧 ICONIȚE SUS DREAPTA */
+
 .navbar-icons {
     position: absolute;
     right: 25px;
@@ -54,7 +54,7 @@
     color: #1e90ff;
 }
 
-/* 🔧 MENIU LATERAL */
+
 .side-menu {
     position: fixed;
     top: 0;
@@ -70,13 +70,13 @@
     visibility: hidden;
     opacity: 0;
 
-    /* ✅ Activăm scroll vertical când conținutul depășește înălțimea */
+
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #888 #222;
 }
 
-/* Scrollbar pentru Chrome/Edge */
+
 .side-menu::-webkit-scrollbar {
     width: 8px;
 }
@@ -88,7 +88,7 @@
     border-radius: 5px;
 }
 
-/* ✅ Când meniul e activ */
+
 .side-menu.open {
     transform: translateX(0);
     visibility: visible;
@@ -155,7 +155,6 @@
     transition: background-color 0.3s ease;
 }
 
-/* ✅ BUTON ÎNCHIDERE */
 .close-btn {
     position: absolute;
     top: 12px;
@@ -167,7 +166,7 @@
     cursor: pointer;
 }
 
-/* ✅ Fundal gri când meniul e deschis */
+
 .backdrop {
     position: fixed;
     top: 0;
@@ -178,7 +177,6 @@
     z-index: 1100;
 }
 
-/* 🔧 Iconiță informativă specială (ex. admin) */
 .info-icon-nav {
     background-color: #f39c12;
     color: white;
@@ -194,7 +192,7 @@
 .info-icon-nav:hover {
     background-color: #e67e22;
 }
-/* 🔧 Contrast link-uri în Dark Mode (vizibil pe fundal închis) */
+
 .dark .side-menu a,
 .dark .side-menu button,
 .dark .icon-link {

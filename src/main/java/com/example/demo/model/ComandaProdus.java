@@ -5,7 +5,7 @@ public class ComandaProdus {
     private int quantity;
     private String price;
 
-    // 🔧 Constructor adăugat
+
     public ComandaProdus(String name, String price, int quantity) {
         this.name = name;
         this.price = price;

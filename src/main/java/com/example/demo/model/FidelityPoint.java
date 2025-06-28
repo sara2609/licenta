@@ -1,4 +1,4 @@
-// ✅ FidelityPoint.java (nouă entitate pentru puncte cu valabilitate)
+
 package com.example.demo.model;
 
 import com.example.demo.User;

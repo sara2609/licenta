@@ -11,7 +11,7 @@ const SettingsPage = () => {
         const token = localStorage.getItem("token");
         const guest = localStorage.getItem("guest");
 
-        // Dacă nu există token (deci nu e user logat) => redirect
+
         if (!token || guest) {
             navigate("/login");
         }

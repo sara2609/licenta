@@ -15,7 +15,7 @@ const CheckoutForm = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    /* info salvate din localStorage */
+
     const orderId = localStorage.getItem("orderId");
     const email   = localStorage.getItem("email");
     const name    = localStorage.getItem("name");
@@ -25,7 +25,7 @@ const CheckoutForm = () => {
 
     const rateInfo = months !== "0" ? (amount / +months).toFixed(2) : null;
 
-    /* obțin clientSecret de la backend */
+
     useEffect(() => {
         if (!amount || isNaN(amount) || amount <= 0) {
             alert("❌ Suma pentru plată nu este validă.");
@@ -66,7 +66,7 @@ const CheckoutForm = () => {
             setError(result.error.message);
         } else if (result.paymentIntent.status === "succeeded") {
             try {
-                /* salvez rate doar dacă există */
+
                 if (months !== "0") {
                     await fetch("http://localhost:8080/installments/create", {
                         method: "POST",
@@ -82,7 +82,7 @@ const CheckoutForm = () => {
                     });
                 }
 
-                /* curăț coșul */
+
                 await fetch("http://localhost:8080/cart/clear-after-payment", {
                     method: "POST",
                     headers: {

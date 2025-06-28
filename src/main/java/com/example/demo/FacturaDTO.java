@@ -19,5 +19,5 @@ public class FacturaDTO {
     private String total;
     private String filePath;
     private LocalDateTime dataEmitere;
-    private String rateSummary; // ✅ nou
+    private String rateSummary;
 }

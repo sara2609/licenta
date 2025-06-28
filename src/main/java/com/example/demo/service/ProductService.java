@@ -70,7 +70,7 @@ public class ProductService {
         productRepository.save(product);
     }
 
-    // 🔥 Sortare după reviewScore descrescător
+
     public List<Product> sortByReviewScoreDesc() {
         return productRepository.findAllByOrderByReviewScoreDesc();
     }

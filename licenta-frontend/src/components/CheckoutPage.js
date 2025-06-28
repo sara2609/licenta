@@ -13,12 +13,12 @@ const CheckoutPage = () => {
         payment: "cash", coupon: ""
     });
 
-    /* 0 = plată integrală */
+
     const [months,      setMonths]      = useState("0");
     const [finalTotal,  setFinalTotal]  = useState(null);
     const navigate                     = useNavigate();
 
-    /* ---------- helpers ---------- */
+
     const handleChange = ({ target:{ name, value } }) =>
         setFormData(prev => ({ ...prev, [name]: value }));
 
@@ -28,7 +28,7 @@ const CheckoutPage = () => {
     const total      = Number(finalTotal ?? localTotal ?? 0);
     const rataEst    = months !== "0" ? (total / +months).toFixed(2) : null;
 
-    /* ---------- submit ---------- */
+
     const handleSubmit = async e => {
         e.preventDefault();
 
@@ -36,7 +36,7 @@ const CheckoutPage = () => {
         const token   = localStorage.getItem("token");
 
         try {
-            /* 🎯 1. Checkout backend */
+
             const resp = await fetch("http://localhost:8080/cart/checkout", {
                 method :"POST",
                 headers:{
@@ -57,7 +57,7 @@ const CheckoutPage = () => {
             const { total:serverTotal } = await resp.json();
             setFinalTotal(+serverTotal);
 
-            /* 🎯 2. Salvăm în localStorage pt. Stripe */
+
             localStorage.setItem("orderId", orderId);
             localStorage.setItem("email", formData.email);
             localStorage.setItem("name",  `${formData.firstName} ${formData.lastName}`);
@@ -65,7 +65,7 @@ const CheckoutPage = () => {
             localStorage.setItem("total", String(serverTotal));
             localStorage.setItem("months", months);          // "0" => integrală
 
-            /* 🎯 3. Redirect */
+
             if (formData.payment === "card") {
                 navigate("/stripe-payment");
             } else {
@@ -80,26 +80,26 @@ const CheckoutPage = () => {
         }
     };
 
-    /* ---------- UI ---------- */
+
     return (
         <div className="checkout-container">
             <h2>📟 Detalii de facturare</h2>
 
             <form onSubmit={handleSubmit} className="checkout-form">
-                {/* --- date client --- */}
+
                 <input name="firstName" placeholder="Prenume"  onChange={handleChange} required />
                 <input name="lastName"  placeholder="Nume"     onChange={handleChange} required />
                 <input name="email"     type="email" placeholder="Email"  onChange={handleChange} required />
                 <input name="phone"     type="tel"   placeholder="Telefon" onChange={handleChange} required />
 
-                {/* --- adresă --- */}
+
                 <input name="address" placeholder="Adresă" onChange={handleChange} required />
                 <input name="city"    placeholder="Oraș"   onChange={handleChange} required />
                 <input name="county"  placeholder="Județ"  onChange={handleChange} required />
                 <input name="zip"     placeholder="Cod poștal" onChange={handleChange} required />
                 <input name="country" value={formData.country} readOnly />
 
-                {/* --- livrare --- */}
+
                 <label>🙵 Livrare:</label>
                 <select name="delivery" value={formData.delivery} onChange={handleChange}>
                     <option value="curier">Curier</option>
@@ -115,14 +115,14 @@ const CheckoutPage = () => {
                     />
                 )}
 
-                {/* --- plată --- */}
+
                 <label>💳 Metodă de plată:</label>
                 <select name="payment" value={formData.payment} onChange={handleChange}>
                     <option value="cash">Ramburs</option>
                     <option value="card">Card bancar</option>
                 </select>
 
-                {/* --- rate doar la card --- */}
+
                 {formData.payment === "card" && (
                     <>
                         <label>📅 Perioadă plată în rate:</label>
@@ -141,7 +141,7 @@ const CheckoutPage = () => {
                     </>
                 )}
 
-                {/* --- cupon --- */}
+
                 <label>🏷️ Cupon:</label>
                 <input
                     name="coupon"

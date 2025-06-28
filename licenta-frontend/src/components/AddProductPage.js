@@ -75,7 +75,7 @@ const AddProductPage = () => {
         formData.append("price", price);
         formData.append("stock", stock);
 
-        // Convertim categoria din string in enum-ul asteptat de backend (uppercase)
+
         let formattedCategory = category.toUpperCase();
         if (formattedCategory === "TABLETĂ") formattedCategory = "TABLETA";
 

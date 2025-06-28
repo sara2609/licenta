@@ -1,20 +1,18 @@
-/* src/components/MatchingPriceForm.css */
 
-/* ---- container general (centrează card-ul) ---- */
 .matching-form-container {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    min-height: calc(100vh - 120px); /* lăsăm loc pentru navbar + footer */
+    min-height: calc(100vh - 120px);
     padding: 40px 20px;
-    background: #f5f7fa;            /* uşor gri deschis */
+    background: #f5f7fa;
 }
 
 .dark .matching-form-container {
     background: #1c1c1c;
 }
 
-/* ---- cardul propriu-zis ---- */
+
 .mp-form-card {
     width: 100%;
     max-width: 540px;
@@ -35,7 +33,7 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
 }
 
-/* ---- titlu + subtitlu ---- */
+
 .mp-form-card h2 {
     margin-top: 0;
     margin-bottom: 6px;
@@ -54,7 +52,7 @@
     color: #c8c8c8;
 }
 
-/* ---- formular ---- */
+
 .matching-form {
     display: flex;
     flex-direction: column;
@@ -98,7 +96,7 @@
     min-height: 96px;
 }
 
-/* ---- eroare ---- */
+
 .mp-error {
     color: #e63a3a;
     font-weight: 600;
@@ -106,7 +104,7 @@
     margin-top: -8px;
 }
 
-/* ---- butonul ---- */
+
 .matching-form button {
     align-self: center;
     width: 60%;
@@ -141,7 +139,7 @@
     background: #0b5ad9;
 }
 
-/* ---- confirmare după submit (dacă alegi să o afişezi) ---- */
+
 .mp-confirm {
     margin-top: 24px;
     font-size: 16px;
@@ -149,7 +147,7 @@
     font-weight: 700;
 }
 
-/* ---- responsive tweaks ---- */
+
 @media (max-width: 480px) {
     .mp-form-card {
         padding: 26px 20px;
@@ -158,9 +156,7 @@
         width: 100%;
     }
 }
-/* Adaugă în MatchingPriceForm.css */
 
-/* card interior pentru formular */
 .mp-inner-box {
     padding: 24px 20px;
     background: #f2f2f2;

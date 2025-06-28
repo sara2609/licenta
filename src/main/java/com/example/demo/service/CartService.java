@@ -118,7 +118,7 @@ public class CartService {
             productRepository.save(product);
         }
 
-        // 🔥 INVALIDARE TOKENURI DUPĂ FOLOSIRE
+
         for (CartItem item : items) {
             if (item.getMatchingPrice() != null) {
                 matchingPriceTokenService.invalidateToken(user.getUserId(), item.getProduct().getId());
@@ -152,13 +152,13 @@ public class CartService {
 
         item.setQuantity(item.getQuantity() + 1);
 
-        // 🔥 Nou: verificăm dacă există token valid pentru acest produs + user
+
         matchingPriceTokenService.getActiveTokensForUser(user.getUserId()).stream()
                 .filter(t -> t.getProduct().getId().equals(productId))
                 .findFirst()
                 .ifPresent(token -> item.setMatchingPrice(token.getApprovedPrice()));
 
-        // 🧼 Resetăm orice puncte sau discount aplicat anterior
+
         item.setUsedPoints(0);
         item.setAppliedDiscount(0);
         item.setPointsApplied(false);
@@ -192,7 +192,7 @@ public class CartService {
             item = new CartItem(user, product, 1);
         }
 
-        // 🔥 AICI e cheia: setează explicit indiferent de situație
+
         item.setUsedPoints(0);
         item.setAppliedDiscount(0);
         item.setPointsApplied(false);

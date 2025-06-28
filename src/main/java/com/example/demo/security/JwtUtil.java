@@ -22,7 +22,7 @@ public class JwtUtil {
     public String generateToken(String email, String role, Long userId) {
         return Jwts.builder()
                 .setSubject(email)
-                .claim("role", role) // e.g. "USER" sau "ADMIN"
+                .claim("role", role)
                 .claim("userId", userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 3600_000))

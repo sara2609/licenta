@@ -32,7 +32,7 @@ public class ReviewService {
             throw new IllegalArgumentException("❌ Produsul nu există!");
         }
 
-        // Verifică dacă userul a mai lăsat review
+
         if (reviewRepository.existsByUserIdAndProductId(user.getUserId(), productId)) {
             throw new IllegalStateException("❗ Ați adăugat deja un review la acest produs!");
         }

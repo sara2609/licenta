@@ -1,4 +1,4 @@
-// src/components/ConfirmAccount.jsx
+
 import React, { useEffect, useState } from 'react';
 
 const ConfirmAccount = () => {

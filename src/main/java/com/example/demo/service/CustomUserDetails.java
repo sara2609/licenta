@@ -29,7 +29,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return identifier; // ← asta era corect, trebuie să se potrivească cu ce vine în token
+        return identifier;
     }
 
 

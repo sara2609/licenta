@@ -20,7 +20,7 @@ public class PaymentService {
     public Map<String, String> createPaymentIntent(long amount, Integer months) throws StripeException {
         PaymentIntentCreateParams params =
                 PaymentIntentCreateParams.builder()
-                        .setAmount(amount * 100)  // Stripe cere suma în cenți
+                        .setAmount(amount * 100)
                         .setCurrency("usd")
                         .addPaymentMethodType("card")
                         .build();

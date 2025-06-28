@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Carousel from "react-multi-carousel";
@@ -58,6 +59,7 @@ const ShopPage = () => {
 
                 setProducts(adj);
                 setRecommendedProducts([...adj].sort((a, b) => b.sold - a.sold).slice(0, 3));
+
                 const ids = JSON.parse(localStorage.getItem("recentProducts")) || [];
                 setRecentProducts(adj.filter(p => ids.includes(p.id)));
             } catch (e) {
@@ -88,11 +90,11 @@ const ShopPage = () => {
                 : `http://localhost:8080/uploads/${img}`;
 
     const ArrowLeft = ({ onClick }) => (
-        <button className="shop-nav-arrow left" onClick={onClick} aria-label="Prev">‹</button>
+        <button className="shop-nav-arrow left" onClick={onClick}>‹</button>
     );
 
     const ArrowRight = ({ onClick }) => (
-        <button className="shop-nav-arrow right" onClick={onClick} aria-label="Next">›</button>
+        <button className="shop-nav-arrow right" onClick={onClick}>›</button>
     );
 
     const ProductCard = ({ product }) => {
@@ -171,7 +173,6 @@ const ShopPage = () => {
                             infinite
                             autoPlay
                             autoPlaySpeed={3000}
-                            keyBoardControl
                             customLeftArrow={<ArrowLeft />}
                             customRightArrow={<ArrowRight />}
                         >

@@ -56,7 +56,7 @@ const LoginForm = () => {
                     onChange={(e) => setPassword(e.target.value)}
                 />
 
-                {/* LINK STILIZAT */}
+                {}
                 <p className="forgot-password" onClick={() => navigate("/forgot-password")}>
                     🔐 Forgot your password?
                 </p>

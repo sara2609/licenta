@@ -1,4 +1,4 @@
-/* 📦 FORMULAR RETUR - LIGHT MODE (implicit) */
+
 .return-container {
     max-width: 600px;
     margin: 40px auto;
@@ -63,13 +63,13 @@
 }
 
 
-/* 🌙 DARK MODE – fundal mai închis pentru container */
+
 .dark .return-container,
 .return-container.dark {
     background-color: #555 !important;
 }
 
-/* 🌙 DARK MODE – text alb și inputuri închise */
+
 .dark .return-container h2,
 .dark .return-container p {
     color: #fff;

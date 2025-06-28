@@ -87,7 +87,7 @@ public class MatchingPriceRequestController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // 🔥 MODIFICAT: Returnează doar ce are nevoie frontend-ul (productId + approvedPrice)
+
     @GetMapping("/tokens/user/{userId}")
     public ResponseEntity<List<Map<String, Object>>> getTokensForUser(@PathVariable Long userId) {
         List<MatchingPriceToken> tokens = tokenService.getActiveTokensForUser(userId);

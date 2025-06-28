@@ -15,7 +15,7 @@ const Navbar = () => {
     const { cartItems }     = useContext(CartContext);
     const { wishlistItems } = useContext(WishlistContext);
 
-    const role   = localStorage.getItem("role"); // "ADMIN" / "USER" / null
+    const role   = localStorage.getItem("role");
     const userId = localStorage.getItem("id");
 
     const [menuOpen,        setMenuOpen]        = useState(false);
@@ -56,12 +56,12 @@ const Navbar = () => {
     };
     const handleRegister = () => navigate("/register");
 
-    /* resetăm categoria când ieșim din /shop */
+
     useEffect(() => {
         if (!location.pathname.includes("/shop")) setActiveCategory("");
     }, [location]);
 
-    /* admin – produse cu stoc redus */
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         if (role === "ADMIN" && token) {
@@ -74,12 +74,12 @@ const Navbar = () => {
         }
     }, [role]);
 
-    /* id produs curent (pentru Matching-Price) */
+
     const currentProductId = location.pathname.startsWith("/product/")
         ? location.pathname.split("/").pop()
         : null;
 
-    /* props convenabile pt side-menu */
+
     const authLinkProps = (route) => ({
         to: route,
         onClick: (e) => {
@@ -100,7 +100,7 @@ const Navbar = () => {
                     </Link>
                 </div>
 
-                {/* ------------- ICON-URI DREAPTA SUS ------------- */}
+                {}
                 <div className="navbar-icons">
                     <Link
                         to="/wishlist"
@@ -128,7 +128,7 @@ const Navbar = () => {
 
                     {userId && (
                         <>
-                            {/* admin vede cereri, user vede card-fidelitate */}
+                            {}
                             {role === "ADMIN" ? (
                                 <Link
                                     to="/admin/matching-requests"
@@ -147,7 +147,7 @@ const Navbar = () => {
                                 </Link>
                             )}
 
-                            {/* ———> AICI e singura modificare ←——— */}
+                            {}
                             {currentProductId && role !== "ADMIN" && (
                                 <Link
                                     to={`/matching-price/request/${currentProductId}`}
@@ -165,10 +165,10 @@ const Navbar = () => {
                 </div>
             </nav>
 
-            {/* backdrop pentru side-menu */}
+            {}
             {menuOpen && <div className="backdrop" onClick={closeMenu} />}
 
-            {/* ------------------------- SIDE-MENU ------------------------- */}
+            {}
             <div className={`side-menu ${menuOpen ? "open" : ""}`}>
                 <button className="close-btn" onClick={closeMenu}>❮</button>
                 <ul>
@@ -251,7 +251,7 @@ const Navbar = () => {
                 </ul>
             </div>
 
-            {/* modal auth */}
+            {}
             {showAuthModal && (
                 <AuthModal
                     onContinue={handleContinue}

@@ -1,9 +1,8 @@
-/* ===== Container + titlu ===== */
+
 .wishlist-container        { padding:30px; max-width:1200px; margin:0 auto; }
 .wishlist-container h2     { text-align:center; margin-bottom:30px; font-size:26px; font-weight:700; }
 .wishlist-container.dark h2{ color:#fff; }
 
-/* ===== Item listă ===== */
 .wishlist-item {
     display:flex;
     gap:20px;
@@ -16,7 +15,7 @@
 }
 .wishlist-container.dark .wishlist-item { background:#2c2c2c; color:#fff; }
 
-/* ===== Imagine ===== */
+
 .wishlist-img {
     min-width:140px;
     height:140px;
@@ -31,13 +30,13 @@
     background:#fafafa;
 }
 
-/* ===== Informații ===== */
+
 .wishlist-info h3 { font-size:18px; margin:4px 0; font-weight:600; }
 .product-description                 { font-size:14px; color:#666; margin:6px 0; }
 .wishlist-container.dark .product-description{ color:#ccc; }
 .product-price                       { font-size:17px; font-weight:700; color:#e60000; margin:6px 0; }
 
-/* Etichetă stoc epuizat */
+
 .stock-label {
     font-size:13px;
     color:#b20000;
@@ -45,7 +44,7 @@
     font-weight:500;
 }
 
-/* ===== Butoane ===== */
+
 .product-actions { display:flex; gap:24px; flex-wrap:wrap; margin-top:10px; }
 
 .cart-button, .wishlist-button{
@@ -64,7 +63,7 @@
 
 .cart-button.disabled { background:#ccc; color:#555; cursor:not-allowed; }
 .cart-button {
-    white-space: nowrap;         /* ↰ forțează tot textul pe un singur rând */
+    white-space: nowrap;
     padding: 10px 24px;
     min-width: 140px;
     font-size: 15px;
@@ -76,7 +75,7 @@
 
 
 .wishlist-button {
-    padding: 10px 24px;         /* ↰ ca să fie de dimensiune apropiată */
+    padding: 10px 24px;
     min-width: 100px;
     font-size: 15px;
     font-weight: 500;

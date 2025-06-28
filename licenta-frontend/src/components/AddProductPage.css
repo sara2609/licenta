@@ -1,3 +1,4 @@
+
 .add-product-container {
     padding: 30px;
     max-width: 500px;
@@ -5,6 +6,7 @@
     background: #f8f8f8;
     border-radius: 8px;
     box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    color: #000;
 }
 
 .add-product-form input,
@@ -15,10 +17,12 @@
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    background: #fff;
+    color: #000;
 }
 
 .add-product-form textarea {
-    min-height: 100px; /* textarea mai mare */
+    min-height: 100px;
 }
 
 .add-product-form button {
@@ -39,4 +43,33 @@
 .message {
     margin-top: 15px;
     font-weight: bold;
+}
+
+
+.dark-mode {
+    background: #303030 !important;
+    color: #f1f1f1;
+}
+
+.dark-mode .add-product-form input,
+.dark-mode .add-product-form textarea,
+.dark-mode .add-product-form select {
+    background: #555;
+    color: #f1f1f1;
+    border: 1px solid #666;
+}
+
+.dark-mode .add-product-form input::placeholder,
+.dark-mode .add-product-form textarea::placeholder {
+    color: #ccc;
+}
+
+.dark-mode .add-product-form button {
+    background: #666;
+    color: #f1f1f1;
+    border: none;
+}
+
+.dark-mode .add-product-form button:hover {
+    background: #777;
 }

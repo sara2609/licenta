@@ -7,7 +7,7 @@ public class Produs {
     private int sold;
     private String price;
 
-    // Getters & Setters
+
     public Long getId() {
         return id;
     }

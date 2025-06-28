@@ -72,7 +72,7 @@ public class CartController {
 
         int totalUsedPoints = cartItems.stream().mapToInt(CartItem::getUsedPoints).sum();
 
-        // ✅ Folosește prețul real (matching dacă există)
+
         double total = cartItems.stream()
                 .mapToDouble(item -> item.getEffectivePrice() * item.getQuantity() - item.getAppliedDiscount())
                 .sum();
@@ -101,7 +101,7 @@ public class CartController {
 
         orderRepository.save(entity);
 
-        // ✅ Salvează plan de rate dacă e trimis din payload
+
         if (payload.containsKey("months")) {
             Object monthsObj = payload.get("months");
             if (monthsObj != null) {
@@ -119,7 +119,7 @@ public class CartController {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "✅ Comanda finalizată cu succes!");
         response.put("total", String.format("%.2f", total));
-        response.put("orderId", orderId); // ✅ Poate fi util în frontend
+        response.put("orderId", orderId);
 
         return ResponseEntity.ok(response);
     }

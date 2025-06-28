@@ -4,15 +4,9 @@ import { jwtDecode } from "jwt-decode";
 import { ThemeContext } from "../context/ThemeContext";
 import "./AccountPage.css";
 
-/**
- * AccountPage
- * ───────────
- * · Dacă utilizatorul este autentificat   → afișez informații + funcții (logout, schimbă parolă etc.).
- * · Dacă este vizitator (fără token)      → rămâne pe pagină, vede doar un mesaj.
- *   Nu mai există redirect sau alertă.
- */
+
 const AccountPage = () => {
-    /* ------------------- state & context ------------------- */
+
     const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
 
@@ -22,19 +16,18 @@ const AccountPage = () => {
     const [showChangeForm, setShowChangeForm] = useState(false);
     const [lowStockProducts, setLowStockProducts] = useState([]);
 
-    /* ------------------- effects ------------------- */
+
     useEffect(() => {
         const token   = localStorage.getItem("token");
         const isGuest = localStorage.getItem("isGuest") === "true";
 
-        // Vizitator ⇒ nu decodăm token, dar rămânem pe pagină
+
         if (!token || isGuest) return;
 
         try {
             const decoded = jwtDecode(token);
             setUserInfo(decoded);
 
-            // --- extra pentru admin: produse cu stoc redus ---
             if (decoded.role === "ADMIN") {
                 fetch("http://localhost:8080/products/low-stock", {
                     headers: { Authorization: `Bearer ${token}` },
@@ -44,13 +37,13 @@ const AccountPage = () => {
                     .catch((err) => console.error("Eroare stocuri mici:", err));
             }
         } catch {
-            // token invalid ⇒ șterg și trimit la login
+
             localStorage.removeItem("token");
             navigate("/login", { replace: true });
         }
     }, [navigate]);
 
-    /* ------------------- handlers ------------------- */
+
     const handleLogout = () => {
         localStorage.clear();
         navigate("/login", { replace: true });
@@ -87,13 +80,13 @@ const AccountPage = () => {
         }
     };
 
-    /* ------------------- render ------------------- */
+
     return (
         <div className={`account-container center-content ${theme}`}>
             <h2 className={`account-title ${theme}`}>👤 Pagina contului</h2>
 
             {userInfo ? (
-                /* ========= UTILIZATOR AUTENTIFICAT ========= */
+
                 <div className="account-info">
                     <p>
                         <strong>Username sau email:</strong> {userInfo.sub}
@@ -142,7 +135,7 @@ const AccountPage = () => {
                     )}
                 </div>
             ) : (
-                /* ========= VIZITATOR NEAUTENTIFICAT ========= */
+
                 <p className="guest-message">
                     Nu ești autentificat. Poți continua să navighezi, dar pentru a vedea
                     detaliile contului trebuie să te

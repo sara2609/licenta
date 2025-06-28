@@ -15,7 +15,7 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_message")
-    private Long idMessage; // ✅ am corectat numele: camelCase, respectă Java conventions
+    private Long idMessage;
 
     @Column(name = "sender_email", nullable = false)
     private String senderEmail;

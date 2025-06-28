@@ -1,4 +1,4 @@
-// src/pages/SettingsPage.jsx
+
 import React, { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 import "./SettingsPage.css";

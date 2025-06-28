@@ -21,10 +21,10 @@ const RegisterForm = () => {
         e.preventDefault();
         if (!accepted) return setMessage("⚠️ Trebuie să accepți termenii.");
 
-        const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            return setMessage("❌ Email invalid!");
-        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (!emailRegex.test(formData.email)) {
+             return setMessage("❌ Email invalid!");
+         }
 
         setLoading(true);
         try {

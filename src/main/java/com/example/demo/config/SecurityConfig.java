@@ -45,7 +45,7 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        /* ---------- PUBLIC ---------- */
+
                         .requestMatchers(
                                 "/auth/login",
                                 "/auth/register",
@@ -54,15 +54,14 @@ public class SecurityConfig {
                                 "/auth/reset-password",
                                 "/uploads/**",
                                 "/api/invoice/view/**",
-                                "/api/facturi/generate",      // PDF generare din checkout
-                                "/api/send-invoice",          // controller e-mail direct
+                                "/api/facturi/generate",
                                 "/api/returns",
                                 "/payment/**"
                         ).permitAll()
 
-                        /* ---------- USER / ADMIN ---------- */
+
                         .requestMatchers(HttpMethod.GET, "/api/facturi/email/**")
-                        .hasAnyRole("USER","ADMIN")          // lista de facturi (comenzile mele)
+                        .hasAnyRole("USER","ADMIN")
 
                         .requestMatchers("/installments/create").authenticated()
 
@@ -71,6 +70,7 @@ public class SecurityConfig {
                                 "/products/{id}",
                                 "/products/low-stock",
                                 "/products/sort/review",
+                                "/products/sort/sold",
                                 "/products?categorie=**"
                         ).permitAll()
 
@@ -101,7 +101,7 @@ public class SecurityConfig {
                         ).hasRole("ADMIN")
                         .requestMatchers("/api/matching-price/generate-token/**").hasRole("ADMIN")
 
-                        /* ---------- FALLBACK ---------- */
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

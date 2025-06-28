@@ -21,16 +21,16 @@ public class EmailController {
     @PostMapping("/send-invoice")
     public ResponseEntity<?> sendInvoice(@RequestBody Comanda comanda) {
         try {
-            // 1. Generează PDF-ul facturii
-            byte[] facturaPDF = facturaService.genereazaFacturaPDF(comanda); // asigură-te că metoda există
 
-            // 2. Conținutul emailului
+            byte[] facturaPDF = facturaService.genereazaFacturaPDF(comanda);
+
+
             String subject = "Factura ta de la S&S Electronics";
             String body = "<h3>Bună " + comanda.getNumeClient() + ",</h3>" +
                     "<p>Găsești atașată factura pentru comanda ta.</p>" +
                     "<p>Mulțumim că ai ales S&S Electronics!</p>";
 
-            // 3. Trimite emailul cu atașament
+
             emailService.sendEmailWithAttachment(
                     comanda.getEmailClient(), subject, body, facturaPDF, "factura.pdf"
             );

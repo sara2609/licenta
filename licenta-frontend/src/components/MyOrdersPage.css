@@ -1,4 +1,4 @@
-/* ───────── CONTAINER & TITLU ───────── */
+
 .orders-container{
     max-width:840px;
     margin:35px auto;
@@ -11,7 +11,7 @@
     margin-bottom:28px;
 }
 
-/* ───────── LISTĂ & CARD ───────── */
+
 .orders-list{
     list-style:none;
     padding:0;
@@ -33,7 +33,7 @@
 
 .order-card span{ white-space:nowrap; }
 
-/* etichetă rată lunară */
+
 .rate-tag{
     grid-column:1/-1;
     background:#ffd34d;
@@ -45,7 +45,7 @@
     font-size:14px;
 }
 
-/* ───────── DARK MODE ───────── */
+
 .dark .orders-title{ color:#a259ff; }
 
 .dark .order-card{

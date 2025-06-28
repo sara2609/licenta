@@ -19,7 +19,7 @@ public class ReturnRequestController {
         this.returnRequestService = returnRequestService;
     }
 
-    // ✅ Trimite cerere retur (user)
+
     @PostMapping
     public ResponseEntity<?> submitReturn(@RequestBody ReturnRequest returnRequest) {
         try {
@@ -30,14 +30,14 @@ public class ReturnRequestController {
         }
     }
 
-    // ✅ Vizualizează toate cererile de retur (ADMIN)
+
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     public List<ReturnRequest> getAllReturns() {
         return returnRequestService.getAll();
     }
 
-    // ✅ Actualizează status retur (APPROVED / REJECTED)
+
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateStatus(@PathVariable Long id, @RequestParam String status) {

@@ -1,4 +1,4 @@
-// src/components/ProductPage.jsx
+
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
@@ -6,32 +6,31 @@ import { ThemeContext } from "../context/ThemeContext";
 import "./ProductPage.css";
 
 const ProductPage = () => {
-    const { id }        = useParams();
+    const { id } = useParams();
     const { addToCart } = useContext(CartContext);
-    const { theme }     = useContext(ThemeContext);
+    const { theme } = useContext(ThemeContext);
 
     const [product, setProduct] = useState(null);
     const [reviews, setReviews] = useState([]);
-    const [rating,  setRating]  = useState(5);
+    const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
 
-    /* helper img */
-    const getImageUrl = img =>
+
+    const getImageUrl = (img) =>
         !img
             ? "http://localhost:8080/uploads/default.png"
             : img.startsWith("http")
                 ? img
                 : `http://localhost:8080${img.startsWith("/uploads") ? "" : "/uploads/"}${img}`;
 
-    /* fetch produs + reviews + token de matching-price */
     useEffect(() => {
         (async () => {
-            /* produs */
-            const p = await fetch(`http://localhost:8080/products/${id}`).then(r => r.json());
 
-            /* matching-price aprobat pentru user curent */
+            const p = await fetch(`http://localhost:8080/products/${id}`).then((r) => r.json());
+
+
             let finalP = p;
-            const token  = localStorage.getItem("token");
+            const token = localStorage.getItem("token");
             const userId = localStorage.getItem("id");
 
             if (token && userId) {
@@ -41,23 +40,30 @@ const ProductPage = () => {
                 );
                 if (tRes.ok) {
                     const tokens = await tRes.json();
-                    const match  = tokens.find(t => t.productId === p.id);
+                    const match = tokens.find((t) => t.productId === p.id);
                     if (match) {
                         finalP = { ...p, initialPrice: p.price, price: match.approvedPrice };
                     }
                 }
             }
 
-            /* reviews */
-            const rv = await fetch(`http://localhost:8080/reviews/product/${id}`).then(r => r.json());
+
+            const rv = await fetch(`http://localhost:8080/reviews/product/${id}`).then((r) => r.json());
 
             setProduct(finalP);
-            setReviews(Array.isArray(rv) ? rv : (rv?.reviews ?? []));
+            setReviews(Array.isArray(rv) ? rv : rv?.reviews || []);
+
+
+            const key = "recentProducts";
+            let recents = JSON.parse(localStorage.getItem(key)) || [];
+            recents = recents.filter((pid) => pid !== p.id);
+            recents.unshift(p.id);
+            if (recents.length > 10) recents = recents.slice(0, 10);
+            localStorage.setItem(key, JSON.stringify(recents));
         })();
     }, [id]);
 
-    /* POST review */
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const token = localStorage.getItem("token");
@@ -67,13 +73,13 @@ const ProductPage = () => {
         }
 
         try {
-            const res = await fetch("http://localhost:8080/reviews/add", {   // ← aici e path-ul corect
+            const res = await fetch("http://localhost:8080/reviews/add", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({ productId: id, rating, comment })
+                body: JSON.stringify({ productId: id, rating, comment }),
             });
 
             if (!res.ok) {
@@ -81,38 +87,43 @@ const ProductPage = () => {
                 throw new Error(msg || "Eroare necunoscută");
             }
 
-            /* refresh listă */
-            const rv = await fetch(`http://localhost:8080/reviews/product/${id}`).then(r => r.json());
-            setReviews(Array.isArray(rv) ? rv : (rv?.reviews ?? []));
+            const rv = await fetch(`http://localhost:8080/reviews/product/${id}`).then((r) => r.json());
+            setReviews(Array.isArray(rv) ? rv : rv?.reviews || []);
             setRating(5);
             setComment("");
-
         } catch (err) {
             console.error("❌ Review post:", err);
             alert("Nu s-a putut trimite review-ul: " + err.message);
         }
     };
 
-    if (!product) return <p style={{ textAlign:"center" }}>Se încarcă produsul…</p>;
+    if (!product) return <p style={{ textAlign: "center" }}>Se încarcă produsul…</p>;
 
-    /* specs */
     let specs = [];
     if (product.details) {
         try {
-            const parsed = typeof product.details === "string" ? JSON.parse(product.details) : product.details;
-            specs = Object.entries(parsed).map(([k, v]) => ({ name:k, value:v }));
-        } catch { /* ignore */ }
+            const parsed =
+                typeof product.details === "string"
+                    ? JSON.parse(product.details)
+                    : product.details;
+            specs = Object.entries(parsed).map(([k, v]) => ({ name: k, value: v }));
+        } catch {
+
+        }
     }
 
     return (
         <div className={`product-page ${theme === "dark" ? "dark" : ""}`}>
             <h2>{product.name}</h2>
 
-            <img className="product-main-img" src={getImageUrl(product.imageUrl)} alt={product.name} />
+            <img
+                className="product-main-img"
+                src={getImageUrl(product.imageUrl)}
+                alt={product.name}
+            />
 
             <p className="product-desc">{product.description}</p>
 
-            {/* bloc preț */}
             <div className="price-box">
                 {product.initialPrice && product.initialPrice > product.price && (
                     <>
@@ -126,19 +137,20 @@ const ProductPage = () => {
                 </p>
             </div>
 
-            <p><strong>Stoc:</strong> {product.stock}</p>
+            <p>
+                <strong>Stoc:</strong> {product.stock}
+            </p>
 
             <button className="add-cart-btn" onClick={() => addToCart(product)}>
                 🛒 Adaugă în coș
             </button>
 
-            {/* detalii tehnice */}
             {specs.length > 0 && (
                 <div className="specs-card">
                     <h3 className="specs-title">📋 Detalii tehnice</h3>
                     <table className="specs-table">
                         <tbody>
-                        {specs.map(s => (
+                        {specs.map((s) => (
                             <tr key={s.name}>
                                 <th>{s.name}</th>
                                 <td>{s.value}</td>
@@ -149,30 +161,32 @@ const ProductPage = () => {
                 </div>
             )}
 
-            <hr style={{ margin:"30px 0" }} />
+            <hr style={{ margin: "30px 0" }} />
 
-            {/* review-uri */}
             <h3>⭐ Review-uri</h3>
-            {reviews.length === 0
-                ? <p>Nu există review-uri pentru acest produs.</p>
-                : reviews.map(r => (
+            {reviews.length === 0 ? (
+                <p>Nu există review-uri pentru acest produs.</p>
+            ) : (
+                reviews.map((r) => (
                     <div key={r.id} className="review-box">
                         <strong>{r.username || "Anonim"}</strong>
                         <p>⭐ {r.rating} / 5</p>
                         <p>{r.comment}</p>
                     </div>
-                ))}
+                ))
+            )}
 
-            {/* formular review */}
             <h3 className="form-title">Lasă un review</h3>
             <form className="review-form" onSubmit={handleSubmit}>
-                <select value={rating} onChange={e => setRating(+e.target.value)}>
-                    {[1,2,3,4,5].map(n => <option key={n}>{n}</option>)}
+                <select value={rating} onChange={(e) => setRating(+e.target.value)}>
+                    {[1, 2, 3, 4, 5].map((n) => (
+                        <option key={n}>{n}</option>
+                    ))}
                 </select>
                 <textarea
                     placeholder="Comentariul tău"
                     value={comment}
-                    onChange={e => setComment(e.target.value)}
+                    onChange={(e) => setComment(e.target.value)}
                 />
                 <button type="submit">Trimite</button>
             </form>

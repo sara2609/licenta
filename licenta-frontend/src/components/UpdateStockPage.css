@@ -1,0 +1,48 @@
+
+.stock-container {
+    background: #fff;
+    color: #000;
+}
+
+input {
+    background: #fff;
+    color: #000;
+}
+
+input::placeholder {
+    color: #555;
+}
+
+button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+}
+
+
+.dark-mode {
+    background: #303030 !important;
+    color: #f1f1f1;
+}
+
+.dark-mode h2,
+.dark-mode h4,
+.dark-mode p {
+    color: #f1f1f1;
+}
+
+.dark-mode input {
+    background: #555;
+    color: #f1f1f1;
+    border: 1px solid #666;
+}
+
+.dark-mode input::placeholder {
+    color: #ccc;
+}
+
+.dark-mode button {
+    background: #666;
+    color: #f1f1f1;
+    border: none;
+}

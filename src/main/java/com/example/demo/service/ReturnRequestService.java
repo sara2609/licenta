@@ -37,7 +37,7 @@ public class ReturnRequestService {
         request.setStatus(status);
         repository.save(request);
 
-        // ✅ Trimite email dacă e aprobat
+
         if (status == ReturnStatus.APPROVED) {
             try {
                 emailService.trimiteEmailSimplu(
@@ -47,7 +47,7 @@ public class ReturnRequestService {
                                 "<p>Veți primi instrucțiuni de retur în curând.</p>"
                 );
             } catch (MessagingException e) {
-                e.printStackTrace(); // poți pune logger
+                e.printStackTrace();
             }
         }
 

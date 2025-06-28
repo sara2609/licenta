@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
-import { ThemeContext } from "../context/ThemeContext";   // ← adăugat
+import { ThemeContext } from "../context/ThemeContext";
 import "./ReturnPage.css";
 
 const ReturnPage = () => {
-    const { theme } = useContext(ThemeContext);             // ← adăugat
+    const { theme } = useContext(ThemeContext);
 
     const [formData, setFormData] = useState({
         name: "",

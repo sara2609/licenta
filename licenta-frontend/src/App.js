@@ -35,7 +35,7 @@ import InformatiiPage from "./components/InformatiiPage";
 import MatchingPriceForm from "./components/MatchingPriceForm";
 import AdminMatchingRequestsPage from "./components/AdminMatchingRequestsPage";
 
-// 🔁 Contexts (ORDINEA CONTEAZĂ!)
+
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
@@ -44,7 +44,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 function App() {
     return (
         <ThemeProvider>
-            <AuthProvider> {/* Trebuie să fie ÎNAINTEA CartProvider */}
+            <AuthProvider>
                 <CartProvider>
                     <WishlistProvider>
                         <Router>

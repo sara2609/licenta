@@ -1,11 +1,11 @@
-/*──────────────────────────── SHOP PAGE ────────────────────────────*/
+
 .shop-container {
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
 
-/* Tema LIGHT (implicită) */
+
 .shop-title {
     text-align: center;
     margin-bottom: 30px;
@@ -14,11 +14,11 @@
     color: #222;
 }
 
-/* Tema DARK */
+
 .shop-container.dark         { background-color: #121212; }
 .shop-title.dark             { color: #a259ff; }
 
-/*────────────────────── FILTRE ──────────────────────*/
+
 .filters{
     display:flex;
     justify-content:center;
@@ -34,7 +34,7 @@
     font-size:14px;
 }
 
-/*────────────────────── CARD PRODUS ──────────────────────*/
+
 .product-card{
     position:relative;
     padding:15px;
@@ -46,7 +46,7 @@
 }
 .shop-container.dark .product-card{ background:#2c2c2c; color:#fff; }
 
-/* ❤️ Buton wishlist flotant */
+
 .wishlist-float{
     position:absolute;
     top:10px;
@@ -64,13 +64,13 @@
 .shop-container.dark .wishlist-float { background:#2c2c2c; }
 .wishlist-float.fav           { background:#ffb3c7; }
 
-/* Imagine & text */
+
 .product-image      { width:100%; height:200px; object-fit:cover; border-radius:8px; margin-bottom:10px; }
 .product-name       { font-size:18px; font-weight:600; margin-bottom:6px; }
 .product-description{ color:#666; font-size:14px; margin-bottom:10px; }
 .shop-container.dark .product-description{ color:#ccc; }
 
-/* Prețuri */
+
 .product-price         { color:#000; font-weight:bold; margin:5px 0; }
 .old-price             { text-decoration:line-through; color:gray; font-size:14px; margin:0; }
 .product-price.reduced { color:#d9534f; }
@@ -80,13 +80,13 @@
     border-radius:5px; font-size:12px; margin-bottom:5px; font-weight:bold;
 }
 
-/* Etichetă stoc */
+
 .stock-label{
     color:#c40000; margin-top:4px;
     font-size:13px; font-weight:600;
 }
 
-/*──────────────────── LAYOUT SECŢIUNI ────────────────────*/
+
 .recommended-container,
 .recent-container{
     display:flex; flex-wrap:wrap; justify-content:center;
@@ -104,7 +104,7 @@
     background:#2c2c2c; color:#fff;
 }
 
-/*──────────────────── SEPARATOR ────────────────────*/
+
 .section-separator{
     margin:40px auto 30px;
     height:1px;
@@ -112,7 +112,7 @@
     width:80%; opacity:.6;
 }
 
-/*──────────────────── SĂGEȚI CARUSEL──────────────────*/
+
 .react-multi-carousel-arrow{
     width:46px; height:46px;
     background:#606060; opacity:.85;
@@ -129,12 +129,12 @@
     .product-image     { height:150px; }
     .product-name      { font-size:16px; }
 
-    /* săgeţi mai aproape pe telefon */
+
     .react-multi-carousel-arrow--left { left:-35px !important; }
     .react-multi-carousel-arrow--right{ right:-35px !important; }
 }
 
-/*──────────────────── Diverse rămase ───────────────────*/
+
 .price-wishlist-row{ display:flex; align-items:center; gap:8px; margin-top:4px; }
 .wishlist-icon-inline{
     background:none; border:none; font-size:20px; cursor:pointer;
@@ -156,7 +156,7 @@
     background-color: #1e1e1e;
     color: #a259ff;
 }
-/* ▸ Box negru pentru titlurile secțiunilor */
+
 .section-title-box{
     background:#111;
     color:#fff;
@@ -174,7 +174,7 @@
     color:#a259ff;
 }
 
-/* ▸ repoziționez săgețile Carousel puțin în afara cardurilor */
+
 .react-multiple-carousel__arrow{
     z-index:3;
     width:38px;
@@ -210,13 +210,13 @@
 .nav-arrow.left { left:-65px; }
 .nav-arrow.right{ right:-65px; }
 
-/* arată săgețile și pe mobil – montează-le mai aproape */
+
 @media(max-width:600px){
     .nav-arrow.left { left:-45px; }
     .nav-arrow.right{ right:-45px; }
 }
 
-/* titluri sub-secțiuni (Recomandate / Recent) în bara neagră slim */
+
 .shop-subtitle{
     background:#000;
     color:#fff;
@@ -230,7 +230,7 @@
     margin-left:auto;
     margin-right:auto;
 }
-/* ─── săgeți carusel ─── */
+
 .nav-arrow{
     position:absolute;
     top:50%;
@@ -250,9 +250,9 @@
     transition:background .2s;
 }
 .nav-arrow:hover{ background:#d0d0d0; }
-.nav-arrow.left { left:-50px; }   /* ajustează cât să iasă lângă listă */
+.nav-arrow.left { left:-50px; }
 .nav-arrow.right{ right:-50px; }
-/*──────────────────── DARK MODE: Istoric vizibil ────────────────────*/
+
 .dark .history-card,
 .dark .history-card *,
 .dark .reward-history,
@@ -263,7 +263,7 @@
     background-color: #1f1f1f !important;
     border-color: #444 !important;
 }
-/* ========== SĂGEȚI CUSTOM SHOP ========== */
+
 .shop-nav-arrow {
     position: absolute;
     top: 50%;
@@ -301,7 +301,7 @@
     padding-inline: 40px;
 }
 
-/* Săgeți elegante + clare pentru caruselul ShopPage */
+
 .shop-nav-arrow {
     position: absolute;
     top: 50%;

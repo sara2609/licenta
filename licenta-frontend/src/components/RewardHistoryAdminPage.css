@@ -1,0 +1,63 @@
+
+.reward-history-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background: #fff;
+    color: #000;
+}
+
+.reward-history-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reward-history-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.reward-history-container thead {
+    background: #f4f4f4;
+}
+
+.reward-history-container th,
+.reward-history-container td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.reward-history-container tbody tr td {
+    border-bottom: 1px solid #eee;
+}
+
+
+.dark-mode {
+    background: #202020;
+    color: #f1f1f1;
+}
+
+.dark-mode h2 {
+    color: #f1f1f1;
+}
+
+.dark-mode thead {
+    background: #333;
+}
+
+.dark-mode th {
+    color: #f1f1f1;
+}
+
+.dark-mode td {
+    color: #f1f1f1;
+}
+
+.dark-mode th,
+.dark-mode td {
+    border-bottom: 1px solid #555;
+}
+
+.dark-mode tbody tr td {
+    border-bottom: 1px solid #444;
+}

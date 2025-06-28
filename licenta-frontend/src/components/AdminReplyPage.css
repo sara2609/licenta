@@ -68,3 +68,63 @@
     font-weight: bold;
     color: #228B22;
 }
+
+.admin-reply-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    color: #000;
+}
+
+
+.message-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+}
+
+textarea {
+    width: 100%;
+    min-height: 80px;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+
+.already-replied {
+    background: #e6ffe6;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+.dark-mode {
+    background: #121212;
+    color: #f1f1f1;
+}
+
+.dark-mode .message-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+}
+
+.dark-mode textarea {
+    background: #2a2a2a;
+    color: #f1f1f1;
+    border: 1px solid #444;
+}
+
+.dark-mode button {
+    background: #333;
+    color: #f1f1f1;
+    border: none;
+}

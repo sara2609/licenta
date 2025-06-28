@@ -53,7 +53,7 @@ public class ProductController {
         return productRepository.findAllByOrderByReviewScoreDesc();
     }
 
-    // ✅ Nou: sortare după cele mai vândute
+
     @GetMapping("/sort/sold")
     public List<Product> sortBySoldDesc() {
         return productRepository.findAllByOrderBySoldDesc();

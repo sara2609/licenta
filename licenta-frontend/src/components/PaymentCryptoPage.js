@@ -1,4 +1,4 @@
-// src/components/PaymentCryptoPage.js
+
 import { useNavigate } from "react-router-dom";
 import { useState, useContext } from "react";
 import { CartContext } from "../context/CartContext";

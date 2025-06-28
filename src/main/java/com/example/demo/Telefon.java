@@ -13,7 +13,7 @@ public class Telefon {
     private String Model;
     private double Pret;
 
-    // Getters și setters
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

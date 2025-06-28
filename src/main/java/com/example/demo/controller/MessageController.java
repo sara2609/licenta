@@ -28,7 +28,7 @@ public class MessageController {
             return ResponseEntity.status(401).body("Trebuie să fii logat pentru a trimite un mesaj!");
         }
 
-        // ✅ Acum getName() va conține emailul din token
+
         String senderEmail = authentication.getName();
         message.setSenderEmail(senderEmail);
         message.setCreatedAt(LocalDateTime.now());

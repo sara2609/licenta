@@ -45,7 +45,7 @@ public class CartItem {
         this.quantity = quantity;
     }
 
-    // ✅ Nou: returnează prețul efectiv (cu matching price dacă există)
+
     public double getEffectivePrice() {
         return matchingPrice != null ? matchingPrice : product.getPrice();
     }

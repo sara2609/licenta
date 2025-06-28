@@ -11,8 +11,8 @@ public class CartItemDTO {
     private Long id;
     private Long productId;
     private String name;
-    private Double price;          // Preț afișat (matching sau normal)
-    private Double originalPrice;  // Prețul inițial din produs
+    private Double price;
+    private Double originalPrice;
     private int quantity;
     private int usedPoints;
     private boolean pointsApplied;

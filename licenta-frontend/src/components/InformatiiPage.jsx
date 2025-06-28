@@ -8,11 +8,11 @@ const InformatiiPage = () => {
             <p>👋 Bun venit pe platforma noastră! Suntem bucuroși că ai ajuns la noi.</p>
 
             <h2>📧 Contact suport</h2>
-            <p>Email: <strong>support@ss-shop.ro</strong></p>
-            <p>Telefon: <strong>+40 745 123 456</strong></p>
+            <p>Email: <strong>stefan.emil.cocolos@gmail.com</strong></p>
+            <p>Telefon: <strong>+40 731 862 884</strong></p>
 
             <h2>🏢 Adresă sediu</h2>
-            <p>Str. Exemplului 123, Sector 1, București</p>
+            <p> Str. Liniștei, bloc A nr.6, Timișoara</p>
 
             <h2>🕘 Program</h2>
             <p>Luni - Vineri: 09:00 - 17:00</p>

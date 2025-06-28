@@ -79,7 +79,7 @@ const AdminReplyPage = () => {
                 <p>Nu există mesaje.</p>
             ) : (
                 messages.map((msg) => {
-                    const messageId = msg.id || msg.idmessage || msg.idMessage; // 🔥 asigurăm ID-ul corect
+                    const messageId = msg.id || msg.idmessage || msg.idMessage;
 
                     return (
                         <div key={messageId} className="message-card">

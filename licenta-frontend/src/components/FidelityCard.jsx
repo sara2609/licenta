@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { ThemeContext } from "../context/ThemeContext"; // ✅ adaugă contextul temei
+import { ThemeContext } from "../context/ThemeContext";
 import "./FidelityCard.css";
 
 const FidelityCard = () => {
     const { id } = useParams();
-    const { theme } = useContext(ThemeContext); // ✅ obține tema curentă
+    const { theme } = useContext(ThemeContext);
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -28,7 +28,7 @@ const FidelityCard = () => {
     const reducere = data.fidelityPoints >= 2000 ? "20%" : data.fidelityPoints >= 1000 ? "10%" : "0%";
 
     return (
-        <div className={`fidelity-container ${theme === "dark" ? "dark" : ""}`}> {/* ✅ aplică clasa */}
+        <div className={`fidelity-container ${theme === "dark" ? "dark" : ""}`}> {}
             <h2>🎫 Card digital de fidelitate</h2>
             <div className="fidelity-card">
                 <p><strong>Nume:</strong> {data.username}</p>

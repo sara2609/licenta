@@ -16,10 +16,10 @@ public class Wishlist {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id") // ✅ Corectăm referința la User
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id") // ✅ Corectăm referința la Product
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id")
     private Product product;
 }

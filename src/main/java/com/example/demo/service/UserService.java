@@ -20,7 +20,7 @@ public class UserService {
             throw new IllegalArgumentException("Password cannot be null or empty!");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // CRIPTEAZĂ parola
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 }

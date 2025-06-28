@@ -52,7 +52,7 @@ const ManageDiscountsPage = () => {
             }
         });
 
-        const result = await response.text(); // tot aici e posibil să nu primești JSON
+        const result = await response.text();
         if (response.ok) {
             alert(result || "🔁 Prețul a fost restaurat!");
             window.location.reload();

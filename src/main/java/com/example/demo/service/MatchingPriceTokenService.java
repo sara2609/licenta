@@ -60,7 +60,7 @@ public class MatchingPriceTokenService {
     @Transactional
     public void invalidateToken(Long userId, Long productId) {
         List<MatchingPriceToken> tokens = tokenRepository.findByUserUserIdAndProduct_Id(userId, productId);
-        tokenRepository.deleteAll(tokens); // ✅ șterge toate tokenurile valabile pentru acel user și produs
+        tokenRepository.deleteAll(tokens);
     }
 
 }

@@ -13,7 +13,7 @@ public interface CartRepository extends JpaRepository<CartItem, Long> {
 
     List<CartItem> findByUser(User user);
 
-    Optional<CartItem> findByUserAndProduct(User user, Product product); // ✅ Optional, corect
+    Optional<CartItem> findByUserAndProduct(User user, Product product);
 
     @Query("SELECT ci FROM CartItem ci JOIN FETCH ci.product WHERE ci.user = :user")
     List<CartItem> findByUserWithProduct(User user);

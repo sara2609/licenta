@@ -9,7 +9,7 @@ const MyOrdersPage = () => {
     const navigate              = useNavigate();
     const { theme }             = useContext(ThemeContext);
 
-    /* ───────── FETCH ───────── */
+
     useEffect(() => {
         const token = localStorage.getItem("token");
         const email = localStorage.getItem("email");
@@ -32,7 +32,6 @@ const MyOrdersPage = () => {
             .finally(() => setLoading(false));
     }, [navigate]);
 
-    /* ───────── UI ───────── */
     if (loading) return <p style={{textAlign:"center"}}>Se încarcă…</p>;
 
     return (

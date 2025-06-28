@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface WishlistRepository extends JpaRepository<Wishlist, Long> {
-    // ❌ Era findByUserId → ✅ Acum folosim findByUser_UserId
+
     List<Wishlist> findByUser_UserId(Long userId);
 }

@@ -1,6 +1,4 @@
-/* src/components/ProductPage.css */
 
-/* ========== LAYOUT GENERAL ========= */
 .product-page {
     max-width: 700px;
     margin: 0 auto;
@@ -35,7 +33,7 @@
 
 .add-cart-btn:hover { opacity: .9; }
 
-/* ========== CARD SPECIFICAȚII ========= */
+
 .specs-card {
     background: #f9f9f9;
     border: 1px solid #ddd;
@@ -83,7 +81,7 @@
     color: #eee;
 }
 
-/* ========== REVIEW BOX ========= */
+
 .review-box {
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -98,7 +96,7 @@
     color: #eee;
 }
 
-/* ========== FORM REVIEW ========= */
+
 .form-title {
     text-align: center;
     font-size: 20px;
@@ -150,7 +148,7 @@
 }
 
 .review-form button:hover { background: #419944; }
-/* ====== preț + reducere ====== */
+
 .price-box {
     margin: 20px 0 26px;
 }
@@ -163,7 +161,7 @@
 }
 
 .product-price.reduced {
-    color: #d9534f;          /* roșu */
+    color: #d9534f;
 }
 
 .old-price {
@@ -184,7 +182,7 @@
     margin-bottom: 6px;
 }
 
-/* DARK mode */
+
 .dark .product-price         { color:#fff; }
 .dark .product-price.reduced { color:#ff7676; }
 .dark .old-price             { color:#999; }

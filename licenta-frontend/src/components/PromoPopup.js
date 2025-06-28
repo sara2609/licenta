@@ -1,4 +1,4 @@
-// src/components/PromoPopup.js
+
 import { useEffect, useState } from "react";
 import "./PromoPopup.css";
 

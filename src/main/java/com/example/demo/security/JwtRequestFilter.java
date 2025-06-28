@@ -27,13 +27,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-
         final String authHeader = request.getHeader("Authorization");
-
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String jwt = authHeader.substring(7);
             String username = jwtUtil.extractUsername(jwt);
-
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 if (jwtUtil.validateToken(jwt, username)) {
                     String role = jwtUtil.extractRole(jwt);
@@ -43,17 +40,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     null,
                                     List.of(new SimpleGrantedAuthority("ROLE_" + role))
                             );
-
                     authenticationToken.setDetails(
                             new WebAuthenticationDetailsSource().buildDetails(request)
                     );
-
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     request.setAttribute("userId", jwtUtil.extractUserId(jwt));
                 }
             }
         }
-
         chain.doFilter(request, response);
     }
 }

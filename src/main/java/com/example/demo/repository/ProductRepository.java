@@ -23,9 +23,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByStockLessThanEqual(int stock);
 
-    // 🔥 Nou: sortare după scor recenzie
+
     List<Product> findAllByOrderByReviewScoreDesc();
 
-    // 🔥 Nou: sortare după cele mai vândute
+
     List<Product> findAllByOrderBySoldDesc();
 }
